@@ -34,12 +34,12 @@ def run_find_s():
 
 
 def get_hipotesis_find_s(result, attr, concepto, condicion_cumplida):
-    hipotesis = ["0"] * len(attr)
+    hipotesis = ["∅"] * len(attr)
 
     for item in result:
         if item[concepto] == condicion_cumplida:
             for i, h in enumerate(hipotesis):
-                if h == "0":
+                if h == "∅":
                     hipotesis[i] = item[attr[i]]
                 elif h == item[attr[i]]:
                     continue
