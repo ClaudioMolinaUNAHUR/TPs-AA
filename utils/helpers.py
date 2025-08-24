@@ -128,15 +128,15 @@ def cargar_csv(file_path, encoding="utf-8"):
 
 def split_test_data(data, test_size=0.2):
     length = len(data)
-    k = math.floor(length * test_size)
-    set_length = length // k - 1
+    parts = math.floor(length * test_size)
+    set_length = length // parts - 1
     test, train = [], []
     pos_to_take = 0
-    mod = length % k
+    mod = length % parts
     
-    for i in range(k):
-        start = length // k * i if i != 0 else 0
-        end = length // k * (i + 1)
+    for i in range(parts):
+        start = length // parts * i if i != 0 else 0
+        end = length // parts * (i + 1)
         
         if end > length:
             end = length
@@ -153,7 +153,7 @@ def split_test_data(data, test_size=0.2):
         train.extend(set_data)
 
         # caso donde tengo resto
-        if mod != 0 and i + 1 == k:
+        if i + 1 == parts and mod != 0:
             set_data = data[end:length]
             if pos_to_take > len(set_data):
                 pos_to_take = 0
