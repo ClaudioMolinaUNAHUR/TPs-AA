@@ -1,0 +1,153 @@
+import numpy as np
+import csv
+
+
+def accuracy_score(tp, tn, fp, fn):
+    # marca la deteccion de positivos, pero no negativos
+    correct = tp + tn
+    total = tp + tn + fp + fn
+    return correct / total
+
+
+def specificity_score(tn, fp):
+    # probabilidad de detectar un neg
+    return tn / (tn + fp)
+
+
+def recall_score(tp, fn):
+    # probabilidad de detectar un pos
+    return tp / (tp + fn)
+
+
+def precision_score(tp, fp):
+    # probabilidad de detectar correctamente casos pos
+    return tp / (tp + fp)
+
+
+def balanced_accuracy_score(recall, specificity):
+    # similar a accuracy pero con clases desbalanceadas
+    return (recall + specificity) / 2
+
+
+def f1_score(precision, recall):
+    # medida de calidad mas general
+    return 2 * precision * recall / (precision + recall)
+
+
+def TPR_score(tp, fn):
+    # tasa verdaderos positivos
+    return recall_score(tp, fn)
+
+
+def FPR_score(fp, tn):
+    # tasa falsos positivos
+    return fp / (fp + tn)
+
+
+def complement_specificity_score(specificity):
+    return 1 - specificity
+
+
+def umbral_equal(recall_array, specificity_array):
+    return np.argmin(np.abs(recall_array - specificity_array))
+
+
+def umbral_youden(recall_array, specificity_array):
+    return np.argmax(recall_array + specificity_array - 1)
+
+
+def umbral_closer_point(recall_array, specificity_array):
+    return np.argmin(recall_array**2 + (specificity_array - 1) ** 2)
+
+
+data = [
+    {"name": "A", "score": 0.98, "cl": 1},
+    {"name": "B", "score": 0.83, "cl": 1},
+    {"name": "C", "score": 0.75, "cl": 0},
+    {"name": "D", "score": 0.69, "cl": 1},
+    {"name": "E", "score": 0.63, "cl": 1},
+    {"name": "F", "score": 0.52, "cl": 0},
+    {"name": "G", "score": 0.45, "cl": 0},
+    {"name": "H", "score": 0.38, "cl": 0},
+    {"name": "I", "score": 0.22, "cl": 0},
+    {"name": "J", "score": 0.1, "cl": 0},
+]
+
+
+def roc_curve(data, key_class):
+    umbral = 0
+    TPR_array = []
+    FPR_array = []
+    length = len(data)
+    for i in range(length):
+        tp = 0
+        tn = 0
+        fp = 0
+        fn = 0
+        for index, item in enumerate(data):
+            if index >= umbral:
+                if item[key_class] == 1:
+                    fn += 1
+                else:
+                    tn += 1
+            else:
+                if item[key_class] == 1:
+                    tp += 1
+                else:
+                    fp += 1
+        TPR = TPR_score(tp, fn)
+        FPR = FPR_score(fp, tn)
+        TPR_array.append(TPR)
+        FPR_array.append(FPR)
+        umbral += 1
+
+    return np.trapezoid(TPR_array, FPR_array)
+
+
+def cargar_csv(file_path, encoding="utf-8"):
+    try:
+        data = []
+        with open(file_path, "r", encoding=encoding) as file:
+            csv_reader = csv.DictReader(file)
+            data = [row for row in csv_reader]
+        return data
+    except Exception as e:
+        print(f"Error al leer el CSV: {e}")
+        return []
+
+
+def split_test_data(data, test_size=0.2):
+    k = int(1 // test_size)
+    length = len(data)
+    set_length = length // k - 1
+    test, train = [], []
+    set_data = []
+    pos_to_take = 0
+    mod = length % k
+    for i in range(k):
+        start = length // k * i if i != 0 else 0
+        end = length // k * (i + 1)
+        if end > length:
+            end = length
+        # start y end van cambiando el orden en el cual eligen en cada iteracion un dato para test
+        set_data = data[start:end]
+
+        # verifica que la posicion no sea mayor al largo del set
+        if pos_to_take > set_length:
+            pos_to_take = 0
+        value = set_data.pop(pos_to_take)
+        pos_to_take += 1
+
+        test.append(value)
+        train.extend(set_data)
+
+        # caso donde tengo resto
+        if mod != 0 and i + 1 == k:
+            set_data = data[end:length]
+            if pos_to_take > len(set_data):
+                pos_to_take = 0
+            value = set_data.pop(pos_to_take)
+            test.append(value)
+            train.extend(set_data)
+
+    return test, train
