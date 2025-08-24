@@ -71,16 +71,6 @@ data = [
     {"name": "H", "score": 0.38, "cl": 0},
     {"name": "I", "score": 0.22, "cl": 0},
     {"name": "J", "score": 0.1, "cl": 0},
-    {"name": "A", "score": 0.98, "cl": 1},
-    {"name": "B", "score": 0.83, "cl": 1},
-    {"name": "C", "score": 0.75, "cl": 0},
-    {"name": "D", "score": 0.69, "cl": 1},
-    {"name": "E", "score": 0.63, "cl": 1},
-    {"name": "F", "score": 0.52, "cl": 0},
-    {"name": "G", "score": 0.45, "cl": 0},
-    {"name": "H", "score": 0.38, "cl": 0},
-    {"name": "I", "score": 0.22, "cl": 0},
-    {"name": "J", "score": 0.1, "cl": 0},
 ]
 
 
@@ -147,7 +137,6 @@ def split_test_data(data, test_size=0.2):
         if pos_to_take >= set_length:
             pos_to_take = 0
         value = set_data.pop(pos_to_take)
-        pos_to_take += 1
         
         test.append(value)
         train.extend(set_data)
@@ -160,5 +149,7 @@ def split_test_data(data, test_size=0.2):
             value = set_data.pop(pos_to_take)
             test.append(value)
             train.extend(set_data)
+        pos_to_take += 1
+
 
     return test, train
