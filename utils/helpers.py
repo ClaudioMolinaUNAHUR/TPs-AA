@@ -1,6 +1,6 @@
 import numpy as np
 import csv
-
+import math
 
 def accuracy_score(tp, tn, fp, fn):
     # marca la deteccion de positivos, pero no negativos
@@ -71,6 +71,16 @@ data = [
     {"name": "H", "score": 0.38, "cl": 0},
     {"name": "I", "score": 0.22, "cl": 0},
     {"name": "J", "score": 0.1, "cl": 0},
+    {"name": "A", "score": 0.98, "cl": 1},
+    {"name": "B", "score": 0.83, "cl": 1},
+    {"name": "C", "score": 0.75, "cl": 0},
+    {"name": "D", "score": 0.69, "cl": 1},
+    {"name": "E", "score": 0.63, "cl": 1},
+    {"name": "F", "score": 0.52, "cl": 0},
+    {"name": "G", "score": 0.45, "cl": 0},
+    {"name": "H", "score": 0.38, "cl": 0},
+    {"name": "I", "score": 0.22, "cl": 0},
+    {"name": "J", "score": 0.1, "cl": 0},
 ]
 
 
@@ -117,16 +127,17 @@ def cargar_csv(file_path, encoding="utf-8"):
 
 
 def split_test_data(data, test_size=0.2):
-    k = int(1 // test_size)
     length = len(data)
+    k = math.ceil(length * test_size)
     set_length = length // k - 1
     test, train = [], []
-    set_data = []
     pos_to_take = 0
     mod = length % k
+    
     for i in range(k):
         start = length // k * i if i != 0 else 0
         end = length // k * (i + 1)
+        
         if end > length:
             end = length
         # start y end van cambiando el orden en el cual eligen en cada iteracion un dato para test
@@ -137,7 +148,7 @@ def split_test_data(data, test_size=0.2):
             pos_to_take = 0
         value = set_data.pop(pos_to_take)
         pos_to_take += 1
-
+        print(len(set_data), value)
         test.append(value)
         train.extend(set_data)
 
