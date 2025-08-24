@@ -15,24 +15,29 @@ def run_find_s():
     file_path = "./tp_1/Préstamo.csv"
     data = cargar_csv(file_path, "latin-1")
 
-    
-    attr = ["Sexo", "Mayor nivel educativo", "Estado de vivienda", "Préstamos previos impagos"]
+    attr = [
+        "Sexo",
+        "Mayor nivel educativo",
+        "Estado de vivienda",
+        "Préstamos previos impagos",
+    ]
     concepto = "Estado"
-    verdad = "OTORGADO"
-    
+    condicion_cumplida = "OTORGADO"
+
     result = filter_data_prestamo(data, attr, concepto, age=50)
-    hipotesis = get_hipotesis_find_s(result, attr, concepto, verdad)
-    
+    hipotesis = get_hipotesis_find_s(result, attr, concepto, condicion_cumplida)
+
     test, train = split_test_data(result, test_size=0.2)
     print(len(test), len(train), len(result), hipotesis)
 
-    return hipotesis   
+    return hipotesis
 
-def get_hipotesis_find_s(result, attr, concepto, verdad):
+
+def get_hipotesis_find_s(result, attr, concepto, condicion_cumplida):
     hipotesis = ["0"] * len(attr)
-    
+
     for item in result:
-        if item[concepto] == verdad: 
+        if item[concepto] == condicion_cumplida:
             for i, h in enumerate(hipotesis):
                 if h == "0":
                     hipotesis[i] = item[attr[i]]
@@ -40,8 +45,8 @@ def get_hipotesis_find_s(result, attr, concepto, verdad):
                     continue
                 else:
                     hipotesis[i] = "?"
-    return hipotesis 
- 
+    return hipotesis
+
 
 def filter_data_prestamo(data, attr, concepto, age):
     result = []
@@ -57,4 +62,3 @@ def filter_data_prestamo(data, attr, concepto, age):
                 }
             )
     return result
-

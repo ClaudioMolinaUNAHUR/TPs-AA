@@ -85,7 +85,7 @@ def roc_curve(data, key_class):
         fp = 0
         fn = 0
         for index, item in enumerate(data):
-            if index >= umbral:
+            if umbral <= index:
                 if item[key_class] == 1:
                     fn += 1
                 else:
