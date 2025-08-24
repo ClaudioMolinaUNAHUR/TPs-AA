@@ -128,7 +128,7 @@ def cargar_csv(file_path, encoding="utf-8"):
 
 def split_test_data(data, test_size=0.2):
     length = len(data)
-    k = math.ceil(length * test_size)
+    k = math.floor(length * test_size)
     set_length = length // k - 1
     test, train = [], []
     pos_to_take = 0
@@ -144,11 +144,11 @@ def split_test_data(data, test_size=0.2):
         set_data = data[start:end]
 
         # verifica que la posicion no sea mayor al largo del set
-        if pos_to_take > set_length:
+        if pos_to_take >= set_length:
             pos_to_take = 0
         value = set_data.pop(pos_to_take)
         pos_to_take += 1
-        print(len(set_data), value)
+        
         test.append(value)
         train.extend(set_data)
 
