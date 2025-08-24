@@ -75,11 +75,10 @@ data = [
 
 
 def roc_curve(data, key_class):
-    umbral = 0
     TPR_array = []
     FPR_array = []
     length = len(data)
-    for i in range(length):
+    for umbral in range(length):
         tp = 0
         tn = 0
         fp = 0
@@ -99,7 +98,6 @@ def roc_curve(data, key_class):
         FPR = FPR_score(fp, tn)
         TPR_array.append(TPR)
         FPR_array.append(FPR)
-        umbral += 1
 
     return np.trapezoid(TPR_array, FPR_array)
 
