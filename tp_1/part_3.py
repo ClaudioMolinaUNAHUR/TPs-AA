@@ -11,7 +11,7 @@ import numpy as np
 from utils.helpers import accuracy_score, split_test_data, cargar_csv, confusion_matrix, specificity_score,recall_score,precision_score, f1_score, TPR_score, FPR_score
 
 
-def part_1_2():
+def part_3():
     file_path = "./tp_1/Préstamo.csv"
     data = cargar_csv(file_path, "latin-1")
 
@@ -20,6 +20,7 @@ def part_1_2():
         "Mayor nivel educativo",
         "Estado de vivienda",
         "Préstamos previos impagos",
+        "Destino de los fondos"
     ]
     concepto = "Estado"
     condicion_cumplida = "OTORGADO"
@@ -30,7 +31,7 @@ def part_1_2():
 
    
 
-    result = filter_data_prestamo(data, attrs, concepto, age=50)
+    result = filter_data_prestamo(data, attrs, concepto, [40,45] )
 
 
     test, train = split_test_data(result, test_size=0.25)
@@ -102,10 +103,11 @@ def get_hipotesis_find_s(result, attrs, concepto, condicion_cumplida):
     return hipotesis
 
 
-def filter_data_prestamo(data, attrs, concepto, age):
+def filter_data_prestamo(data, attrs, concepto, ages):
     result = []
     for row in data:
-        if int(row["Edad"]) == age:
+        if int(row["Edad"]) in ages:
+            
             personal_data = {}
             for attr in attrs:
                 personal_data[attr] = row[attr]
@@ -115,4 +117,5 @@ def filter_data_prestamo(data, attrs, concepto, age):
                     concepto: row[concepto],
                 }
             )
+    print(result)
     return result

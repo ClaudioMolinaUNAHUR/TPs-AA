@@ -151,3 +151,24 @@ def split_test_data(data, test_size=0.2):
 
 
     return test, train
+
+
+#Matriz de confusión.
+
+def confusion_matrix(data,concepto,prediction_column,condicion_cumplida):
+    tp = 0
+    tn = 0
+    fp = 0
+    fn = 0
+    for row in data:
+        if row[concepto] == condicion_cumplida:
+            if row[prediction_column] == 1:
+                tp += 1
+            else:
+                fn += 1
+        else:
+            if row[prediction_column] == 1:
+                fp += 1
+            else:
+                tn += 1
+    return {"tp": tp, "tn": tn, "fp": fp, "fn": fn}
