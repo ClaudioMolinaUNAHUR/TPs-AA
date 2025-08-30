@@ -15,7 +15,7 @@ def main():
     result_2 = part_3()
     
     ## print("Resultado 1_2: ", likeJson(result_1))
-    #print("Resultado 3: ", likeJson(result_2))
+    print("Resultado 3: ", likeJson(result_2))
 
 
 if __name__ == "__main__":

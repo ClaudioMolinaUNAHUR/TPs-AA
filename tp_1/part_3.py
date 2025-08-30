@@ -1,23 +1,16 @@
 import numpy as np
-from collections import defaultdict, Counter
-
-
 from utils.helpers import (
     accuracy_score,
     split_test_data,
     cargar_csv,
     confusion_matrix,
-    specificity_score,
     recall_score,
     precision_score,
     f1_score,
-    TPR_score,
-    FPR_score,
+    roc_curve
 )
 from tp_1.addons.functions import (
     filter_data_prestamo,
-    get_hipotesis_find_s,
-    evaluate_find_s,
 )
 
 
@@ -42,107 +35,100 @@ def part_3():
     
     evaluated = []
     #print(test[0])
-    discrete_naive_bayes(test[0], train, attrs, concepto, condicion_cumplida)
-    #for row in test:
-     #   result = discrete_naive_bayes(row, train, attrs, concepto, condicion_cumplida)
-      #  row[prediction_column] = result
-       # evaluated.append(row)
+    # discrete_naive_bayes(test[0], train, attrs, concepto, condicion_cumplida)
+    # discrete_naive_bayes2(test[0], train, attrs, concepto, condicion_cumplida)
+    for row in test:
+       result = discrete_naive_bayes(row, train, attrs, concepto, condicion_cumplida)
+       row[prediction_column] = result
+       evaluated.append(row)
        
     print(evaluated)
-    # confusion_matrix_result = confusion_matrix(
-    #     evaluated, concepto, prediction_column, condicion_cumplida
-    # )
+    confusion_matrix_result = confusion_matrix(
+        evaluated, concepto, prediction_column, condicion_cumplida
+    )
 
     # 1 - pi - cantidad de una clase  / cantidad de casos totales
     # 2 - Theta - se toma 1 estado categorico de 1 atributo y ademas que esten con en clase, y luego en la otra
     # 3 - se multiplica pi * productoria de todos los theta de esa clase
-    # tp = confusion_matrix_result["tp"]
-    # tn = confusion_matrix_result["tn"]
-    # fp = confusion_matrix_result["fp"]
-    # fn = confusion_matrix_result["fn"]
-    # accuracy = accuracy_score(tp, tn, fp, fn)
-    # specificity = specificity_score(tn, fp)
-    # recall = recall_score(tp, fn)
-    # precision = precision_score(tp, fp)
-    # f1 = f1_score(precision, recall)
-    # TPR = TPR_score(tp, fn)
-    # FPR = FPR_score(fp, tn)
-    # return {
-    #     "accuracy": accuracy,
-    #     "specificity": specificity,
-    #     "recall": recall,
-    #     "precision": precision,
-    #     "f1": f1,
-    #     "TPR": TPR,
-    #     "FPR": FPR,
-    #     "confusion_matrix": confusion_matrix_result,
-    # }
+    tp = confusion_matrix_result["tp"]
+    tn = confusion_matrix_result["tn"]
+    fp = confusion_matrix_result["fp"]
+    fn = confusion_matrix_result["fn"]
+    print(tp, tn, fp, fn)
+    accuracy = accuracy_score(tp, tn, fp, fn)
+    recall = recall_score(tp, fn)
+    precision = precision_score(tp, fp)
+    f1 = f1_score(precision, recall)
+    roc = roc_curve(evaluated, concepto)
+    return {
+        "accuracy": accuracy,
+        "f1": f1,
+        "confusion_matrix": confusion_matrix_result,
+        "roc": roc
+    }
 
 
 def discrete_naive_bayes(test_row, train, attrs, concepto_column, condicion_cumplida):
-    """
-    Versión binaria (2 clases) de Naive Bayes categórico con Laplace.
-    - attrs: lista de columnas categóricas
-    - concepto_column: nombre de la columna de clase
-    - condicion_cumplida: etiqueta de la clase "positiva" que querés medir (p.ej. 'Sí')
-    Devuelve: probabilidad P(Y=condicion_cumplida | x)
-    """
-    laplace = 1.0
+    class_rows = {}
+    N = len(train)
+    pi = {}
+    theta = {}
+    laplace = 1
+    for attr in attrs:
+        value = test_row[attr]
+        if value not in theta:
+            theta[value] = {"attr": attr,"total": 0}
 
-    # ---- 1) Priors P(Y=c) con Laplace ----
-    class_counts = Counter(row[concepto_column] for row in train)
-  
-    classes = list(class_counts.keys())
-    if len(classes) != 2:
-        raise ValueError("Esta función asume exactamente 2 clases.")
-    N = len(train); K = 2
-
-    pi = {c: (class_counts[c] + laplace) / (N + laplace * K) for c in classes}
-
-    # Para normalizar por clase en cada atributo (denominador), guardo filas por clase
-    class_rows = {c: [] for c in classes}
+    
+    num_vals_attr = {}
+    
     for row in train:
+        if row[concepto_column] not in class_rows:
+            class_rows[row[concepto_column]] = []
+            pi[row[concepto_column]] = 0
+
+        for attr in attrs:
+            value = row[attr]
+            if attr not in num_vals_attr:
+                num_vals_attr[attr] = set()
+            num_vals_attr[attr].add(value)
+            
         class_rows[row[concepto_column]].append(row)
 
-    # ---- 2) Vocabularios por atributo (|V_attr|) ----
-    vocab = {a: set(r[a] for r in train) for a in attrs}
-    for a in attrs:
-        vocab[a].add(test_row[a])  # por si en test aparece valor no visto
-
-    # ---- 3) Conteos por atributo/valor/clase: counts[attr][valor][clase] ----
-    counts = {a: defaultdict(Counter) for a in attrs}
-    for r in train:
-        c = r[concepto_column]
-        for a in attrs:
-            v = r[a]
-            counts[a][v][c] += 1
-
-    # ---- 4) Producto de likelihoods por clase ----
-    unnormalized = {}
-    for c in classes:
-        producto = 1.0
-        class_n = len(class_rows[c])
-        for a in attrs:
-            v = test_row[a]
-            Va = len(vocab[a])                            # |V_attr|
-            num = counts[a][v][c] + laplace              # conteo del valor en esa clase + α
-            den = class_n + laplace * Va                 # total de esa clase + α*|V_attr|
-            producto *= (num / den)
-        unnormalized[c] = pi[c] * producto
-
-    # ---- 5) Normalización a posteriors ----
-    Z = sum(unnormalized.values())
-    post = {c: (unnormalized[c] / Z) if Z > 0 else 0.5 for c in classes}
-
-    accept = post.get(condicion_cumplida, 0.0)
-    reject = 1.0 - accept
-
-    # (prints de depuración, opcionales)
-    # print("pi:", pi)
-    # print("post:", post)
-    # print("accept, reject:", accept, reject)
-
-    # Devolver como antes: prob de la clase pedida
-    return accept
+        for value in theta:
+            if value in row.values():
+                theta[value]["total"] += 1
+                theta[value][row[concepto_column]] = (
+                    theta[value][row[concepto_column]] + 1
+                    if row[concepto_column] in theta[value]
+                    else 1
+                )
+                
+    for classes in pi:
+        #print(len(class_rows[classes]), classes, "total de registros de Cada")
+        pi[classes] = (len(class_rows[classes]) + laplace) / (N + laplace * len(class_rows))
+    # print(pi, "% de cada")
+    # print(theta)
+    total_p = 0
+    for classes in pi:
+        producto = 1
+        for value in theta:            
+            count = theta[value].get(classes, 0)
+            #print(classes , (count + laplace) / (theta[value]["total"] + laplace * len(class_rows)), value, "COUNT")
+            producto *= (count + laplace) / (len(class_rows[classes]) + laplace * len(num_vals_attr[theta[value].get("attr")]))
+        #print(producto, classes, "PRODUCTO")
+        pi[classes] *= producto
+        total_p += pi[classes]
+    # print(pi)
+    accept = 0
+    reject = 0
+    for classes in pi:
+        if classes == condicion_cumplida:
+            accept = pi[classes] / total_p
+        else:
+            reject = pi[classes] / total_p
+            
+    #print(accept, reject)
+    return accept if accept > reject else abs(reject - 1)
 
 # TODO: poner print para el conj de prueba

@@ -17,12 +17,12 @@ def specificity_score(tn, fp):
 
 def recall_score(tp, fn):
     # probabilidad de detectar un pos
-    return tp / (tp + fn)
+    return tp / (tp + fn)  if fn + tp != 0 else 0
 
 
 def precision_score(tp, fp):
     # probabilidad de detectar correctamente casos pos
-    return tp / (tp + fp)
+    return tp / (tp + fp) if fp + tp != 0 else 0
 
 
 def balanced_accuracy_score(recall, specificity):
@@ -32,7 +32,9 @@ def balanced_accuracy_score(recall, specificity):
 
 def f1_score(precision, recall):
     # medida de calidad mas general
-    return 2 * precision * recall / (precision + recall)
+    return 2 * precision * recall / (precision + recall) if precision + recall != 0 else 0
+
+
 
 
 def TPR_score(tp, fn):
@@ -99,7 +101,8 @@ def roc_curve(data, key_class):
         FPR = FPR_score(fp, tn)
         TPR_array.append(TPR)
         FPR_array.append(FPR)
-
+    print(TPR_array)
+    print(FPR_array)   
     return np.trapezoid(TPR_array, FPR_array)
 
 
@@ -159,12 +162,12 @@ def confusion_matrix(data, concepto, prediction_column, condicion_cumplida):
     fn = 0
     for row in data:
         if row[concepto] == condicion_cumplida:
-            if row[prediction_column] == 1:
+            if row[prediction_column] > .5:
                 tp += 1
             else:
                 fn += 1
         else:
-            if row[prediction_column] == 1:
+            if row[prediction_column] > .5:
                 fp += 1
             else:
                 tn += 1
