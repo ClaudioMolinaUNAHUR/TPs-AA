@@ -17,7 +17,7 @@ def specificity_score(tn, fp):
 
 def recall_score(tp, fn):
     # probabilidad de detectar un pos
-    return tp / (tp + fn)  if fn + tp != 0 else 0
+    return tp / (tp + fn) if fn + tp != 0 else 0
 
 
 def precision_score(tp, fp):
@@ -32,9 +32,9 @@ def balanced_accuracy_score(recall, specificity):
 
 def f1_score(precision, recall):
     # medida de calidad mas general
-    return 2 * precision * recall / (precision + recall) if precision + recall != 0 else 0
-
-
+    return (
+        2 * precision * recall / (precision + recall) if precision + recall != 0 else 0
+    )
 
 
 def TPR_score(tp, fn):
@@ -77,7 +77,7 @@ data = [
 ]
 
 
-def roc_curve(data, key_class):
+def roc_curve(data, key_class, condicion_cumplida):
     TPR_array = []
     FPR_array = []
     length = len(data)
@@ -88,12 +88,12 @@ def roc_curve(data, key_class):
         fn = 0
         for index, item in enumerate(data):
             if umbral <= index:
-                if item[key_class] == 1:
+                if item[key_class] == condicion_cumplida:
                     fn += 1
                 else:
                     tn += 1
             else:
-                if item[key_class] == 1:
+                if item[key_class] == condicion_cumplida:
                     tp += 1
                 else:
                     fp += 1
@@ -101,8 +101,7 @@ def roc_curve(data, key_class):
         FPR = FPR_score(fp, tn)
         TPR_array.append(TPR)
         FPR_array.append(FPR)
-    print(TPR_array)
-    print(FPR_array)   
+
     return np.trapezoid(TPR_array, FPR_array)
 
 
@@ -155,6 +154,7 @@ def split_test_data(data, test_size=0.2):
 
     return test, train
 
+
 def confusion_matrix(data, concepto, prediction_column, condicion_cumplida):
     tp = 0
     tn = 0
@@ -162,12 +162,12 @@ def confusion_matrix(data, concepto, prediction_column, condicion_cumplida):
     fn = 0
     for row in data:
         if row[concepto] == condicion_cumplida:
-            if row[prediction_column] > .5:
+            if row[prediction_column] > 0.5:
                 tp += 1
             else:
                 fn += 1
         else:
-            if row[prediction_column] > .5:
+            if row[prediction_column] > 0.5:
                 fp += 1
             else:
                 tn += 1
