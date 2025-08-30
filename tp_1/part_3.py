@@ -1,4 +1,7 @@
 import numpy as np
+from collections import defaultdict, Counter
+
+
 from utils.helpers import (
     accuracy_score,
     split_test_data,
@@ -39,11 +42,11 @@ def part_3():
     
     evaluated = []
     #print(test[0])
-    # discrete_naive_bayes(test[0], train, attrs, concepto, condicion_cumplida)
-    for row in test:
-        result = discrete_naive_bayes(row, train, attrs, concepto, condicion_cumplida)
-        row[prediction_column] = result
-        evaluated.append(row)
+    discrete_naive_bayes(test[0], train, attrs, concepto, condicion_cumplida)
+    #for row in test:
+     #   result = discrete_naive_bayes(row, train, attrs, concepto, condicion_cumplida)
+      #  row[prediction_column] = result
+       # evaluated.append(row)
        
     print(evaluated)
     # confusion_matrix_result = confusion_matrix(
@@ -77,58 +80,69 @@ def part_3():
 
 
 def discrete_naive_bayes(test_row, train, attrs, concepto_column, condicion_cumplida):
-    classFinded = {}
-    length = len(train)
-    pi = {}
-    theta = {}
-    laplace = 1
-    for attr in attrs:
-        value = test_row[attr]
-        if value not in theta:
-            theta[value] = {"total": 0}
-    print(theta)
+    """
+    Versión binaria (2 clases) de Naive Bayes categórico con Laplace.
+    - attrs: lista de columnas categóricas
+    - concepto_column: nombre de la columna de clase
+    - condicion_cumplida: etiqueta de la clase "positiva" que querés medir (p.ej. 'Sí')
+    Devuelve: probabilidad P(Y=condicion_cumplida | x)
+    """
+    laplace = 1.0
+
+    # ---- 1) Priors P(Y=c) con Laplace ----
+    class_counts = Counter(row[concepto_column] for row in train)
+  
+    classes = list(class_counts.keys())
+    if len(classes) != 2:
+        raise ValueError("Esta función asume exactamente 2 clases.")
+    N = len(train); K = 2
+
+    pi = {c: (class_counts[c] + laplace) / (N + laplace * K) for c in classes}
+
+    # Para normalizar por clase en cada atributo (denominador), guardo filas por clase
+    class_rows = {c: [] for c in classes}
     for row in train:
-        if row[concepto_column] not in classFinded:
-            classFinded[row[concepto_column]] = []
-            pi[row[concepto_column]] = 0
+        class_rows[row[concepto_column]].append(row)
 
-        classFinded[row[concepto_column]].append(row)
+    # ---- 2) Vocabularios por atributo (|V_attr|) ----
+    vocab = {a: set(r[a] for r in train) for a in attrs}
+    for a in attrs:
+        vocab[a].add(test_row[a])  # por si en test aparece valor no visto
 
-        for value in theta:
-            if value in row.values():
-                theta[value]["total"] += 1
-                theta[value][row[concepto_column]] = (
-                    theta[value][row[concepto_column]] + 1
-                    if row[concepto_column] in theta[value]
-                    else 1
-                )
-    
-    for classes in pi:
-        print(len(classFinded[classes]), classes, "total de registros de Cada")
-        pi[classes] = (len(classFinded[classes]) + laplace) / (length + laplace * len(classFinded))
-    print(pi, "% de cada")
-    print(theta)
-    total_p = 0
-    for classes in pi:
-        producto = 1
-        for value in theta:            
-            count = theta[value].get(classes, 0)
-            print(classes , (count + laplace) / (theta[value]["total"] + laplace * len(classFinded)), value, "COUNT")
-            producto *= (count + laplace) / (theta[value]["total"] + laplace * len(classFinded))
-        print(producto, classes, "PRODUCTO")
-        pi[classes] *= producto
-        total_p += pi[classes]
-    print(pi)
-    accept = 0
-    reject = 0
-    for classes in pi:
-        if classes == condicion_cumplida:
-            accept = pi[classes] / total_p
-        else:
-            reject = pi[classes] / total_p
-            
-    print(accept, reject)
-    return accept if accept > reject else abs(reject - 1)
+    # ---- 3) Conteos por atributo/valor/clase: counts[attr][valor][clase] ----
+    counts = {a: defaultdict(Counter) for a in attrs}
+    for r in train:
+        c = r[concepto_column]
+        for a in attrs:
+            v = r[a]
+            counts[a][v][c] += 1
 
+    # ---- 4) Producto de likelihoods por clase ----
+    unnormalized = {}
+    for c in classes:
+        producto = 1.0
+        class_n = len(class_rows[c])
+        for a in attrs:
+            v = test_row[a]
+            Va = len(vocab[a])                            # |V_attr|
+            num = counts[a][v][c] + laplace              # conteo del valor en esa clase + α
+            den = class_n + laplace * Va                 # total de esa clase + α*|V_attr|
+            producto *= (num / den)
+        unnormalized[c] = pi[c] * producto
+
+    # ---- 5) Normalización a posteriors ----
+    Z = sum(unnormalized.values())
+    post = {c: (unnormalized[c] / Z) if Z > 0 else 0.5 for c in classes}
+
+    accept = post.get(condicion_cumplida, 0.0)
+    reject = 1.0 - accept
+
+    # (prints de depuración, opcionales)
+    # print("pi:", pi)
+    # print("post:", post)
+    # print("accept, reject:", accept, reject)
+
+    # Devolver como antes: prob de la clase pedida
+    return accept
 
 # TODO: poner print para el conj de prueba
