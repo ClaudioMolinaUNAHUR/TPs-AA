@@ -1,4 +1,3 @@
-import numpy as np
 from utils.helpers import (
     accuracy_score,
     split_test_data,
@@ -85,13 +84,13 @@ def discrete_naive_bayes(test_row, train, attrs, concepto_column, condicion_cump
             class_rows[row[concepto_column]] = []
             pi[row[concepto_column]] = 0
 
+        class_rows[row[concepto_column]].append(row)
+        
         for attr in attrs:
             value = row[attr]
             if attr not in num_vals_attr:
                 num_vals_attr[attr] = set()
             num_vals_attr[attr].add(value)
-
-        class_rows[row[concepto_column]].append(row)
 
         for value in theta:
             if value in row.values():
