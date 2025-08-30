@@ -14,7 +14,7 @@ def main():
     result_1 = part_1_2()
     result_2 = part_3()
     
-    print("Resultado 1_2: ", likeJson(result_1))
+    ## print("Resultado 1_2: ", likeJson(result_1))
     print("Resultado 3: ", likeJson(result_2))
 
 
