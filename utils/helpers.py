@@ -12,7 +12,7 @@ def accuracy_score(tp, tn, fp, fn):
 
 def specificity_score(tn, fp):
     # probabilidad de detectar un neg
-    return tn / (tn + fp)
+    return tn / (tn + fp) if tn + fp != 0 else 0
 
 
 def recall_score(tp, fn):
@@ -44,7 +44,7 @@ def TPR_score(tp, fn):
 
 def FPR_score(fp, tn):
     # tasa falsos positivos
-    return fp / (fp + tn)
+    return fp / (fp + tn) if tn + fp != 0 else 0
 
 
 def complement_specificity_score(specificity):

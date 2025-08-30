@@ -40,7 +40,7 @@ def part_3():
         result = discrete_naive_bayes(row, train, attrs, concepto, condicion_cumplida)
         row[prediction_column] = result
         evaluated.append(row)
-
+    
     confusion_matrix_result = confusion_matrix(
         evaluated, concepto, prediction_column, condicion_cumplida
     )
