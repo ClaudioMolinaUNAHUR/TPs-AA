@@ -38,14 +38,14 @@ def part_3():
     test, train = split_test_data(result, test_size=0.3)
     
     evaluated = []
-    
+    #print(test[0])
     # discrete_naive_bayes(test[0], train, attrs, concepto, condicion_cumplida)
-    for row in train:
+    for row in test:
         result = discrete_naive_bayes(row, train, attrs, concepto, condicion_cumplida)
         row[prediction_column] = result
         evaluated.append(row)
        
-    # print(evaluated)
+    print(evaluated)
     # confusion_matrix_result = confusion_matrix(
     #     evaluated, concepto, prediction_column, condicion_cumplida
     # )
@@ -81,12 +81,12 @@ def discrete_naive_bayes(test_row, train, attrs, concepto_column, condicion_cump
     length = len(train)
     pi = {}
     theta = {}
-    
+    laplace = 1
     for attr in attrs:
         value = test_row[attr]
         if value not in theta:
             theta[value] = {"total": 0}
-
+    print(theta)
     for row in train:
         if row[concepto_column] not in classFinded:
             classFinded[row[concepto_column]] = []
@@ -102,22 +102,23 @@ def discrete_naive_bayes(test_row, train, attrs, concepto_column, condicion_cump
                     if row[concepto_column] in theta[value]
                     else 1
                 )
-    for mv in pi:
-        print(len(classFinded[mv]), mv)
-        pi[mv] = len(classFinded[mv]) / length
-    # print(pi)
+    
+    for classes in pi:
+        print(len(classFinded[classes]), classes, "total de registros de Cada")
+        pi[classes] = (len(classFinded[classes]) + laplace) / (length + laplace * len(classFinded))
+    print(pi, "% de cada")
     print(theta)
     total_p = 0
     for classes in pi:
         producto = 1
-        for value in theta:
-            if classes in theta[value]:
-                producto *= theta[value][classes] / theta[value]["total"]
-            else:
-                producto *= 1
+        for value in theta:            
+            count = theta[value].get(classes, 0)
+            print(classes , (count + laplace) / (theta[value]["total"] + laplace * len(classFinded)), value, "COUNT")
+            producto *= (count + laplace) / (theta[value]["total"] + laplace * len(classFinded))
+        print(producto, classes, "PRODUCTO")
         pi[classes] *= producto
         total_p += pi[classes]
-    # print(pi)
+    print(pi)
     accept = 0
     reject = 0
     for classes in pi:
@@ -127,9 +128,7 @@ def discrete_naive_bayes(test_row, train, attrs, concepto_column, condicion_cump
             reject = pi[classes] / total_p
             
     print(accept, reject)
-    return accept if accept > reject else reject
-
-    return accept > reject
+    return accept if accept > reject else abs(reject - 1)
 
 
 # TODO: poner print para el conj de prueba
