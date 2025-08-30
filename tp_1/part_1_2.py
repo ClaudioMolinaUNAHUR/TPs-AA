@@ -18,7 +18,7 @@ from tp_1.addons.functions import (
 )
 
 
-def part_3():
+def part_1_2():
     file_path = "./tp_1/Préstamo.csv"
     data = cargar_csv(file_path, "latin-1")
 
@@ -27,21 +27,21 @@ def part_3():
         "Mayor nivel educativo",
         "Estado de vivienda",
         "Préstamos previos impagos",
-        "Destino de los fondos",
     ]
     concepto = "Estado"
     condicion_cumplida = "OTORGADO"
     prediction_column = "prediction"
 
-    result = filter_data_prestamo(data, attrs, concepto, ages=[40, 45])
+    result = filter_data_prestamo(data, attrs, concepto, ages=[50])
 
-    test, train = split_test_data(result, test_size=0.3)
+    test, train = split_test_data(result, test_size=0.25)
     hipotesis = get_hipotesis_find_s(train, attrs, concepto, condicion_cumplida)
 
     evaluated = evaluate_find_s(test, hipotesis, attrs, prediction_column)
     confusion_matrix_result = confusion_matrix(
         evaluated, concepto, prediction_column, condicion_cumplida
     )
+    # print(confusion_matrix_result)
 
     tp = confusion_matrix_result["tp"]
     tn = confusion_matrix_result["tn"]
@@ -54,6 +54,8 @@ def part_3():
     f1 = f1_score(precision, recall)
     TPR = TPR_score(tp, fn)
     FPR = FPR_score(fp, tn)
+
+    # print(len(test), len(train), len(result), hipotesis)
 
     return {
         "hipotesis": hipotesis,

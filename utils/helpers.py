@@ -2,6 +2,7 @@ import numpy as np
 import csv
 import math
 
+
 def accuracy_score(tp, tn, fp, fn):
     # marca la deteccion de positivos, pero no negativos
     correct = tp + tn
@@ -121,11 +122,11 @@ def split_test_data(data, test_size=0.2):
     test, train = [], []
     pos_to_take = 0
     mod = length % parts
-    
+
     for i in range(parts):
         start = length // parts * i if i != 0 else 0
         end = length // parts * (i + 1)
-        
+
         if end > length:
             end = length
         # start y end van cambiando el orden en el cual eligen en cada iteracion un dato para test
@@ -135,7 +136,7 @@ def split_test_data(data, test_size=0.2):
         if pos_to_take >= set_length:
             pos_to_take = 0
         value = set_data.pop(pos_to_take)
-        
+
         test.append(value)
         train.extend(set_data)
 
@@ -149,13 +150,9 @@ def split_test_data(data, test_size=0.2):
             train.extend(set_data)
         pos_to_take += 1
 
-
     return test, train
 
-
-#Matriz de confusión.
-
-def confusion_matrix(data,concepto,prediction_column,condicion_cumplida):
+def confusion_matrix(data, concepto, prediction_column, condicion_cumplida):
     tp = 0
     tn = 0
     fp = 0
