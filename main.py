@@ -7,15 +7,15 @@ import json
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-def likeJson(data):
+def like_json(data):
     return json.dumps(data, indent=2, ensure_ascii=False)
 
 def main():
     result_1 = part_1_2()
     result_2 = part_3()
     
-    print("Resultado 1_2: ", likeJson(result_1))
-    print("Resultado 3: ", likeJson(result_2))
+    print("Resultado 1_2: ", like_json(result_1))
+    print("Resultado 3: ", like_json(result_2))
 
 
 if __name__ == "__main__":
