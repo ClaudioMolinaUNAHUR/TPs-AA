@@ -58,7 +58,7 @@ def discrete_naive_bayes(test_row, train, attrs, concepto_column, condicion_cump
     for attr in attrs:
         value = test_row[attr]
         if value not in theta:
-            theta[value] = {"attr": attr, "total": 0}
+            theta[value] = {"attr": attr}
 
     for row in train:
         if row[concepto_column] not in class_rows:
@@ -75,40 +75,36 @@ def discrete_naive_bayes(test_row, train, attrs, concepto_column, condicion_cump
 
             for value_t in theta:
                 if value_t == value_row and theta[value_t]["attr"] == attr:
-                    theta[value_t]["total"] += 1
-                    theta[value_t][row[concepto_column]] = (
-                        theta[value_t][row[concepto_column]] + 1
-                        if row[concepto_column] in theta[value_t]
-                        else 1
-                    )
+                    if row[concepto_column] not in theta[value_t]:
+                        theta[value_t][row[concepto_column]] = 0
+
+                    theta[value_t][row[concepto_column]] += 1
                     break
-
-    for K in pi:
-        # print(len(class_rows[classes]), classes, "total de registros de Cada")
-        total_items_in_class = len(class_rows[K])
-        numerador = total_items_in_class + laplace
-
-        total_Ks = len(class_rows)
-        denominador = N + laplace * total_Ks
-
-        pi[K] = numerador / denominador
 
     # print(pi, "% de cada")
     # print(theta)
     total_probability = 0
     probability = {}
     for K in pi:
+        quantity_items_in_class = len(class_rows[K])
+        numerador_pi = quantity_items_in_class + laplace
+
+        quantity_Ks = len(class_rows)
+        denominador_pi = N + laplace * quantity_Ks
+
+        pi[K] = numerador_pi / denominador_pi
+
         producto = 1
         for value in theta:
-            count = theta[value].get(K, 0)
-            numerador = count + laplace
+            quantity_value_theta = theta[value].get(K, 0)
+            numerador_theta = quantity_value_theta + laplace
 
             quantity_values_from_attr = len(types_vals_attr[theta[value].get("attr")])
             N_register_class = len(class_rows[K])
 
-            denominador = N_register_class + laplace * quantity_values_from_attr
+            denominador_theta = N_register_class + laplace * quantity_values_from_attr
 
-            producto *= numerador / denominador
+            producto *= numerador_theta / denominador_theta
 
         # print(producto, classes, "PRODUCTO")
         probability[K] = pi[K] * producto
