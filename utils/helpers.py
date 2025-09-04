@@ -107,7 +107,6 @@ def roc_curve(data, key_class, condicion_cumplida):
     # PLOT HACIENDO SUAVIZADO DE CURVA
     x = np.array(FPR_array) 
     y = np.array(TPR_array) 
-    print("x:", x,"y:", y)
     # Ordenar por x
     order = np.argsort(x)
     x = x[order]
