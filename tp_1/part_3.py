@@ -54,12 +54,12 @@ def part_3():
     recall = recall_score(tp, fn)
     precision = precision_score(tp, fp)
     f1 = f1_score(precision, recall)
-    roc = roc_curve(evaluated, concepto, condicion_cumplida)
+    auc = roc_curve(evaluated, concepto, condicion_cumplida)
     return {
         "accuracy": accuracy,
         "f1": f1,
         "confusion_matrix": confusion_matrix_result,
-        "roc": roc,
+        "auc": auc,
     }
 
 
