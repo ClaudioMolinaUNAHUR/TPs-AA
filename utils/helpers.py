@@ -1,6 +1,8 @@
-import numpy as np
 import csv
 import math
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.interpolate import make_interp_spline
 
 
 def accuracy_score(tp, tn, fp, fn):
@@ -101,6 +103,25 @@ def roc_curve(data, key_class, condicion_cumplida):
         FPR = FPR_score(fp, tn)
         TPR_array.append(TPR)
         FPR_array.append(FPR)
+    
+    # PLOT HACIENDO SUAVIZADO DE CURVA
+    x = np.array(TPR_array)
+    y = np.array(FPR_array)
+
+    # Ordenar por x
+    order = np.argsort(x)
+    x = x[order]
+    y = y[order]
+
+    x, idx = np.unique(x, return_index=True)
+    y = y[idx]
+
+    x_new = np.linspace(x.min(), x.max(), 500)
+    f = make_interp_spline(x, y, k=2)  # cuadrática
+    y_smooth = f(x_new)
+    plt.plot (x_new,y_smooth)
+    plt.scatter (x, y)
+    plt.show()
 
     return np.trapezoid(TPR_array, FPR_array)
 
