@@ -120,8 +120,8 @@ def roc_curve(data, key_class, condicion_cumplida):
     y_smooth = f(x_new)
     plt.plot (x_new,y_smooth)
     plt.scatter (x, y)
+    plt.savefig("roc_curve.png")
     plt.show()
-
     return np.trapezoid(TPR_array, FPR_array)
 
 
