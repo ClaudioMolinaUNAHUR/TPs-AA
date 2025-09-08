@@ -7,6 +7,7 @@ from utils.helpers import (
     precision_score,
     f1_score,
     roc_curve,
+    plot_roc_curve,
 )
 from tp_1.addons.functions import filter_data_prestamo, discrete_naive_bayes
 
@@ -54,12 +55,22 @@ def part_3():
     recall = recall_score(tp, fn)
     precision = precision_score(tp, fp)
     f1 = f1_score(precision, recall)
-    roc = roc_curve(evaluated, concepto, condicion_cumplida)
+    roc_result = roc_curve(evaluated, concepto, condicion_cumplida)
+    
+    # Graficar la curva ROC
+    plot_roc_curve(
+        roc_result["fpr"], 
+        roc_result["tpr"], 
+        roc_result["auc"],
+        title="Curva ROC - Naive Bayes para Préstamos",
+        save_path="roc_curve_naive_bayes.png"
+    )
+    
     return {
         "accuracy": accuracy,
         "f1": f1,
         "confusion_matrix": confusion_matrix_result,
-        "roc": roc,
+        "roc": roc_result,
     }
 
 

@@ -1,6 +1,7 @@
 import numpy as np
 import csv
 import math
+import matplotlib.pyplot as plt
 
 
 def accuracy_score(tp, tn, fp, fn):
@@ -102,7 +103,50 @@ def roc_curve(data, key_class, condicion_cumplida):
         TPR_array.append(TPR)
         FPR_array.append(FPR)
 
-    return np.trapezoid(TPR_array, FPR_array)
+    auc = np.trapezoid(TPR_array, FPR_array)
+    return {
+        "auc": auc,
+        "tpr": TPR_array,
+        "fpr": FPR_array
+    }
+
+
+def plot_roc_curve(fpr, tpr, auc, title="Curva ROC", save_path=None):
+    """
+    Grafica la curva ROC
+    
+    Args:
+        fpr: Array de tasas de falsos positivos
+        tpr: Array de tasas de verdaderos positivos  
+        auc: Área bajo la curva
+        title: Título del gráfico
+        save_path: Ruta para guardar el gráfico (opcional)
+    """
+    plt.figure(figsize=(8, 6))
+    
+    # Graficar la curva ROC
+    plt.plot(fpr, tpr, color='darkorange', lw=2, 
+             label=f'Curva ROC (AUC = {auc:.3f})')
+    
+    # Graficar la línea diagonal (clasificador aleatorio)
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--', 
+             label='Clasificador aleatorio')
+    
+    # Configurar el gráfico
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('Tasa de Falsos Positivos (FPR)')
+    plt.ylabel('Tasa de Verdaderos Positivos (TPR)')
+    plt.title(title)
+    plt.legend(loc="lower right")
+    plt.grid(True, alpha=0.3)
+    
+    # Guardar si se especifica una ruta
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        print(f"Gráfico guardado en: {save_path}")
+    
+    plt.show()
 
 
 def cargar_csv(file_path, encoding="utf-8"):
