@@ -13,6 +13,7 @@ from tp_1.addons.functions import filter_data_prestamo, discrete_naive_bayes
 
 def part_3():
     file_path = "./tp_1/Préstamo.csv"
+    file_path_roc = "./tp_1/roc_curve.png"
     data = cargar_csv(file_path, "latin-1")
 
     attrs = [
@@ -54,7 +55,7 @@ def part_3():
     recall = recall_score(tp, fn)
     precision = precision_score(tp, fp)
     f1 = f1_score(precision, recall)
-    auc = roc_curve(evaluated, concepto, condicion_cumplida)
+    auc = roc_curve(evaluated, concepto, condicion_cumplida, file_path_roc)
     return {
         "accuracy": accuracy,
         "f1": f1,

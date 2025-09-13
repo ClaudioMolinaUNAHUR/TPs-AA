@@ -79,7 +79,7 @@ data = [
 ]
 
 
-def roc_curve(data, key_class, condicion_cumplida):
+def roc_curve(data, key_class, condicion_cumplida, path_to_save):
     TPR_array = []
     FPR_array = []
     length = len(data)
@@ -127,7 +127,7 @@ def roc_curve(data, key_class, condicion_cumplida):
     plt.ylabel("Tasa de Verdaderos Positivos (TPR)")  # Etiqueta para el eje Y
     
     # Guardar y mostrar el gráfico
-    plt.savefig("roc_curve.png")
+    plt.savefig(path_to_save)
     plt.show()
     
     return np.trapezoid(TPR_array, FPR_array)
