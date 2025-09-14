@@ -199,3 +199,24 @@ def confusion_matrix(data, concepto, prediction_column, condicion_cumplida):
             else:
                 tn += 1
     return {"tp": tp, "tn": tn, "fp": fp, "fn": fn}
+
+
+def filter_data_prestamo(data, attrs, concepto, ages, between=False):
+    result = []
+    to_filter = []
+    if between:
+        to_filter = range(ages[0], ages[1] + 1)
+    else:
+        to_filter = ages
+    for row in data:
+        if int(row["Edad"]) in to_filter:
+            personal_data = {}
+            for attr in attrs:
+                personal_data[attr] = row[attr]
+            result.append(
+                {
+                    **personal_data,
+                    concepto: row[concepto],
+                }
+            )
+    return result

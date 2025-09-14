@@ -13,27 +13,6 @@ def get_hipotesis_find_s(result, attrs, concepto, condicion_cumplida):
     return hipotesis
 
 
-def filter_data_prestamo(data, attrs, concepto, ages, between=False):
-    result = []
-    to_filter = []
-    if between:
-        to_filter = range(ages[0], ages[1] + 1)
-    else:
-        to_filter = ages
-    for row in data:
-        if int(row["Edad"]) in to_filter:
-            personal_data = {}
-            for attr in attrs:
-                personal_data[attr] = row[attr]
-            result.append(
-                {
-                    **personal_data,
-                    concepto: row[concepto],
-                }
-            )
-    return result
-
-
 def evaluate_find_s(test, hipotesis, attrs, prediction_column="prediction"):
     result = []
     for row in test:

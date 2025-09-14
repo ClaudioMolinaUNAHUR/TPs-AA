@@ -7,8 +7,9 @@ from utils.helpers import (
     precision_score,
     f1_score,
     roc_curve,
+    filter_data_prestamo,
 )
-from tp_1.addons.functions import filter_data_prestamo, discrete_naive_bayes
+from tp_1.addons.functions import discrete_naive_bayes
 
 
 def part_3():
@@ -50,7 +51,7 @@ def part_3():
     tn = confusion_matrix_result["tn"]
     fp = confusion_matrix_result["fp"]
     fn = confusion_matrix_result["fn"]
-    print(tp, tn, fp, fn)
+    
     accuracy = accuracy_score(tp, tn, fp, fn)
     recall = recall_score(tp, fn)
     precision = precision_score(tp, fp)

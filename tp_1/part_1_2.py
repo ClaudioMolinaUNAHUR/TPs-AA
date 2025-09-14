@@ -10,9 +10,9 @@ from utils.helpers import (
     f1_score,
     TPR_score,
     FPR_score,
+    filter_data_prestamo,
 )
 from tp_1.addons.functions import (
-    filter_data_prestamo,
     get_hipotesis_find_s,
     evaluate_find_s,
 )
