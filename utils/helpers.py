@@ -103,10 +103,10 @@ def roc_curve(data, key_class, condicion_cumplida, path_to_save):
         FPR = FPR_score(fp, tn)
         TPR_array.append(TPR)
         FPR_array.append(FPR)
-    
+
     # PLOT HACIENDO SUAVIZADO DE CURVA
-    x = np.array(FPR_array) 
-    y = np.array(TPR_array) 
+    x = np.array(FPR_array)
+    y = np.array(TPR_array)
     # Ordenar por x
     order = np.argsort(x)
     x = x[order]
@@ -118,19 +118,20 @@ def roc_curve(data, key_class, condicion_cumplida, path_to_save):
     x_new = np.linspace(x.min(), x.max(), 500)
     f = make_interp_spline(x, y, k=2)  # cuadrática
     y_smooth = f(x_new)
-    
+
     plt.plot(x_new, y_smooth)
     plt.scatter(x, y)
-    
+
     # Agregar etiquetas a los ejes
     plt.xlabel("Tasa de Falsos Positivos (FPR)")  # Etiqueta para el eje X
     plt.ylabel("Tasa de Verdaderos Positivos (TPR)")  # Etiqueta para el eje Y
-    
+
     # Guardar y mostrar el gráfico
     plt.savefig(path_to_save)
     plt.show()
-    
+
     return np.trapezoid(TPR_array, FPR_array)
+
 
 def cargar_csv(file_path, encoding="utf-8"):
     try:

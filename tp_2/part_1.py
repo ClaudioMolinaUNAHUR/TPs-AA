@@ -31,6 +31,9 @@ def tp2_part_1():
     tree = id3(train, attrs, concepto)
     # print(tree)
     evaluated = []
+    print("test: ", len(test))
+    print("train: ", len(train))
+    print("total: ", len(result))
     for row in test:
         clase = evaluate_id3(row, tree)
         row[prediction_column] = 1 if condicion_cumplida == clase else 0
