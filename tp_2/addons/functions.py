@@ -8,8 +8,8 @@ def evaluate_id3(data, tree):
     if not esdict:
         return tree
 
-    for key, value in tree.items():
-        if data[key] in value.keys():
+    for key, value in tree.items():   
+        if key != "metrics" and data[key] in value.keys():
             return evaluate_id3(data, value[data[key]])
 
     return None
@@ -61,7 +61,7 @@ def id3(data, attrs, target_attr):
     mejor_attr = max(attrs, key=lambda a: ganancia_informacion(data, a, target_attr))
 
     # crear el nodo del árbol
-    arbol = {mejor_attr: {}}
+    arbol = {mejor_attr: {}, "metrics": {"IG": ganancia_informacion(data, mejor_attr, target_attr), "Class": Counter(clases)}}
 
     # se crea conjunto de valores que toma ese atributo mejor rankeado dentro del conjunto de datos
     set_values = set()
