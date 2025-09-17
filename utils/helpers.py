@@ -1,5 +1,6 @@
 import csv
 import math
+import json
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
@@ -142,6 +143,15 @@ def cargar_csv(file_path, encoding="utf-8"):
         return data
     except Exception as e:
         print(f"Error al leer el CSV: {e}")
+        return []
+    
+def save_json(file_path, data, encoding="utf-8"):
+    try:       
+        with open(file_path, "w", encoding=encoding) as archivo:
+            json.dump(data, archivo, indent=2, ensure_ascii=False)
+        print(f"Datos guardados en {file_path}")
+    except Exception as e:
+        print(f"Error al guardar los datos: {e}")
         return []
 
 

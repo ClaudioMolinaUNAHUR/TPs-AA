@@ -8,7 +8,7 @@ def evaluate_id3(data, tree):
     if not esdict:
         return tree
 
-    for key, value in tree.items():   
+    for key, value in tree.items():
         if key != "metrics" and data[key] in value.keys():
             return evaluate_id3(data, value[data[key]])
 
@@ -51,7 +51,7 @@ def id3(data, attrs, target_attr):
 
     # Caso 1: todas las instancias son de la misma clase
     if len(set(clases)) == 1:
-        return clases[0]
+        return {"class": clases[0], "metrics": {"entropy": 0, "count": len(clases)}}
 
     # Caso 2: no hay más atributos
     if not attrs:
@@ -61,7 +61,13 @@ def id3(data, attrs, target_attr):
     mejor_attr = max(attrs, key=lambda a: ganancia_informacion(data, a, target_attr))
 
     # crear el nodo del árbol
-    arbol = {mejor_attr: {}, "metrics": {"IG": ganancia_informacion(data, mejor_attr, target_attr), "Class": Counter(clases)}}
+    arbol = {
+        mejor_attr: {},
+        "metrics": {
+            "entropy": entropia(data, target_attr),
+            "Class": Counter(clases),
+        },
+    }
 
     # se crea conjunto de valores que toma ese atributo mejor rankeado dentro del conjunto de datos
     set_values = set()
@@ -85,8 +91,18 @@ def id3(data, attrs, target_attr):
             for attr in attrs:
                 if attr != mejor_attr:
                     nuevos_attrs.append(attr)
-
-            arbol[mejor_attr][value] = id3(filter_by_value, nuevos_attrs, target_attr)
+            result = id3(filter_by_value, nuevos_attrs, target_attr)
+                
+            if isinstance(result, dict) and "class" in result:
+                arbol[mejor_attr][value] = result["class"]
+                arbol["metrics"].setdefault("pure_children", []).append({
+                    "value": value,
+                    "entropy": 0,
+                    "count": result["metrics"]["count"]
+                })
+            else:
+                arbol[mejor_attr][value] = result
+            #arbol[mejor_attr][value] = id3(filter_by_value, nuevos_attrs, target_attr)
 
     return arbol
 

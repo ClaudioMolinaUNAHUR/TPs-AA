@@ -7,6 +7,7 @@ from utils.helpers import (
     accuracy_score,
     recall_score,
     filter_data_prestamo,
+    save_json
 )
 from tp_2.addons.functions import id3, evaluate_id3
 
@@ -52,9 +53,8 @@ def tp2_part_1():
     recall = recall_score(tp, fn)
     precision = precision_score(tp, fp)
     f1 = f1_score(precision, recall)
-
+    save_json("./tp_2/tree.json", tree)
     return {
-        "tree": tree,
         "accuracy": accuracy,
         "f1": f1,
         "confusion_matrix": confusion_matrix_result,
