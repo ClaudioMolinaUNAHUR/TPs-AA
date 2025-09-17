@@ -57,7 +57,7 @@ def id3(data, attrs, target_attr):
     if not attrs:
         return mayoritary_class(clases)
 
-    # Caso 3: escoger el mejor atributo según ganancia de información
+    # escoger el mejor atributo según ganancia de información
     mejor_attr = max(attrs, key=lambda a: ganancia_informacion(data, a, target_attr))
 
     # crear el nodo del árbol
