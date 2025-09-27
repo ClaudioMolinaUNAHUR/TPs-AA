@@ -15,15 +15,22 @@ def predict_id3(data, tree):
     return None
 
 def predict_random_forest_id3(data, forrest, condicion_cumplida, prediction_column):
+
     for row in data:
         predictions = []
         for tree in forrest:
             clase = predict_id3(row, tree)
-            predictions.append(1 if condicion_cumplida == clase else 0)
-        counts = 0
-        for i, x in enumerate(predictions):
-            counts += x
-        prediction = counts / len(predictions)
+            if clase is not None:
+                predictions.append(1 if condicion_cumplida == clase else 0)
+            else:
+              
+                predictions.append(0)
+        
+       
+        positive_votes = sum(predictions)
+        total_votes = len(predictions)
+        prediction = positive_votes / total_votes if total_votes > 0 else 0
+        
         row[prediction_column] = 1 if prediction > 0.5 else 0          
     return None
 
@@ -62,13 +69,13 @@ def ganancia_informacion(data, attr, target_attr):
 def discrete_id3(data, attrs, target_attr):
     clases = [row[target_attr] for row in data]    
     
-    # Caso 1: todas las instancias son de la misma clase
+    
     if len(set(clases)) == 1:
-        return 1, {"class": clases[0], "metrics": {"entropy": 0, "count": len(clases)}}
+        return 0, {"class": clases[0], "metrics": {"entropy": 0, "count": len(clases)}}
 
-    # Caso 2: no hay más atributos
+  
     if not attrs:
-        return 1, mayoritary_class(clases)
+        return 0, mayoritary_class(clases)
 
     # escoger el mejor atributo según ganancia de información
     mejor_attr = max(attrs, key=lambda a: ganancia_informacion(data, a, target_attr))
@@ -82,6 +89,7 @@ def discrete_id3(data, attrs, target_attr):
         },
     }
 
+  
     node_count = 1
     
     # se crea conjunto de valores que toma ese atributo mejor rankeado dentro del conjunto de datos
@@ -98,7 +106,7 @@ def discrete_id3(data, attrs, target_attr):
                 filter_by_value.append(row)
 
         if not filter_by_value:
-            # si no hay datos, usar clase mayoritaria
+           
             arbol[mejor_attr][value] = mayoritary_class(clases)
         else:
             # se crea nueva lista de atributos sin el mejor, porque ya se consulto
@@ -117,7 +125,6 @@ def discrete_id3(data, attrs, target_attr):
                 })
             else:
                 arbol[mejor_attr][value] = result
-            #arbol[mejor_attr][value] = id3(filter_by_value, nuevos_attrs, target_attr)
 
     return node_count, arbol
 
@@ -134,16 +141,29 @@ def mayoritary_class(clases):
 
     return class_value
 
-def bootstrap_train(train, attrs, forrest_length):
+
+def bootstrap_train(train, attrs, forrest_length, q_attrs=None):
+   
     bootstraps = []
     len_train = len(train)
+    
+
+    if q_attrs is None:
+        q_attrs = max(1, int(math.sqrt(len(attrs)))) #raiz de a
+    
     for i in range(forrest_length):     
-        bootstraps.append({ "attrs": [], "train": [] })
-        for attr in attrs:
-            random_value = random.random()
-            if len(bootstraps[i]["attrs"]) == 0 or random_value > 0.5:
-                bootstraps[i]["attrs"].append(attr)
-        for t in range(len_train):
+       
+        bootstrap_sample = []
+        for _ in range(len_train): 
             select_pos = random.randint(0, len_train - 1)
-            bootstraps[i]["train"].append(train[select_pos])
+            bootstrap_sample.append(train[select_pos])
+        
+        
+        selected_attrs = random.sample(attrs, min(q_attrs, len(attrs)))
+        
+        bootstraps.append({
+            "attrs": selected_attrs,
+            "train": bootstrap_sample
+        })
+    
     return bootstraps
