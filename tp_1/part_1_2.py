@@ -14,7 +14,7 @@ from utils.helpers import (
 )
 from tp_1.addons.functions import (
     get_hipotesis_find_s,
-    evaluate_find_s,
+    predict_find_s,
 )
 
 
@@ -37,16 +37,16 @@ def part_1_2():
     test, train = split_test_data(result, test_size=0.25)
     hipotesis = get_hipotesis_find_s(train, attrs, concepto, condicion_cumplida)
 
-    evaluated = evaluate_find_s(test, hipotesis, attrs, prediction_column)
+    predicted = predict_find_s(test, hipotesis, attrs, prediction_column)
     confusion_matrix_result = confusion_matrix(
-        evaluated, concepto, prediction_column, condicion_cumplida
+        predicted, concepto, prediction_column, condicion_cumplida
     )
-    # print(confusion_matrix_result)
 
     tp = confusion_matrix_result["tp"]
     tn = confusion_matrix_result["tn"]
     fp = confusion_matrix_result["fp"]
     fn = confusion_matrix_result["fn"]
+    
     accuracy = accuracy_score(tp, tn, fp, fn)
     specificity = specificity_score(tn, fp)
     recall = recall_score(tp, fn)
@@ -54,8 +54,6 @@ def part_1_2():
     f1 = f1_score(precision, recall)
     TPR = TPR_score(tp, fn)
     FPR = FPR_score(fp, tn)
-
-    # print(len(test), len(train), len(result), hipotesis)
 
     return {
         "hipotesis": hipotesis,

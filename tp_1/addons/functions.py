@@ -13,7 +13,7 @@ def get_hipotesis_find_s(result, attrs, concepto, condicion_cumplida):
     return hipotesis
 
 
-def evaluate_find_s(test, hipotesis, attrs, prediction_column="prediction"):
+def predict_find_s(test, hipotesis, attrs, prediction_column="prediction"):
     result = []
     for row in test:
         correct = True

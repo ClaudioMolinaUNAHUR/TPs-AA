@@ -7,12 +7,14 @@ from utils.helpers import (
     accuracy_score,
     recall_score,
     filter_data_prestamo,
-    save_json
+    save_json,
 )
-from tp_2.addons.functions import id3, evaluate_id3
+from tp_2.addons.functions import discrete_id3, predict_id3
+
 
 def tp2_part_1():
     file_path = "./tp_1/Préstamo.csv"
+    file_path_tree = "./tp_2/tree.json"
     data = cargar_csv(file_path, "latin-1")
 
     attrs = [
@@ -28,19 +30,22 @@ def tp2_part_1():
 
     result = filter_data_prestamo(data, attrs, concepto, ages=[40, 45], between=True)
     test, train = split_test_data(result, test_size=0.20)
-    tree = id3(train, attrs, concepto)
-    # print(tree)
-    evaluated = []
+
     print("test: ", len(test))
     print("train: ", len(train))
     print("total: ", len(result))
+    
+    quantity, tree = discrete_id3(train, attrs, concepto)
+    save_json(file_path_tree, tree)
+
+    predicted = []
     for row in test:
-        clase = evaluate_id3(row, tree)
+        clase = predict_id3(row, tree)
         row[prediction_column] = 1 if condicion_cumplida == clase else 0
-        evaluated.append(row)
+        predicted.append(row)
 
     confusion_matrix_result = confusion_matrix(
-        evaluated, concepto, prediction_column, condicion_cumplida
+        predicted, concepto, prediction_column, condicion_cumplida
     )
 
     tp = confusion_matrix_result["tp"]
@@ -52,7 +57,6 @@ def tp2_part_1():
     recall = recall_score(tp, fn)
     precision = precision_score(tp, fp)
     f1 = f1_score(precision, recall)
-    save_json("./tp_2/tree.json", tree)
     return {
         "accuracy": accuracy,
         "f1": f1,

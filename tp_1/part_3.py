@@ -32,16 +32,16 @@ def part_3():
 
     test, train = split_test_data(result, test_size=0.2)
 
-    evaluated = []
+    predicted = []
     # print(test[0])
     # discrete_naive_bayes(test[0], train, attrs, concepto, condicion_cumplida)
     for row in test:
         result = discrete_naive_bayes(row, train, attrs, concepto, condicion_cumplida)
         row[prediction_column] = result
-        evaluated.append(row)
+        predicted.append(row)
 
     confusion_matrix_result = confusion_matrix(
-        evaluated, concepto, prediction_column, condicion_cumplida
+        predicted, concepto, prediction_column, condicion_cumplida
     )
 
     # 1 - pi - cantidad de una clase  / cantidad de casos totales
@@ -56,7 +56,7 @@ def part_3():
     recall = recall_score(tp, fn)
     precision = precision_score(tp, fp)
     f1 = f1_score(precision, recall)
-    auc = roc_curve(evaluated, concepto, condicion_cumplida, file_path_roc)
+    auc = roc_curve(predicted, concepto, condicion_cumplida, file_path_roc)
     return {
         "accuracy": accuracy,
         "f1": f1,

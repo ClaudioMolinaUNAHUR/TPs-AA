@@ -1,7 +1,7 @@
 # Árbol de decisión (ID3)
 
 ```mermaid
-flowchart TD
+flowchart LR
 classDef otorgado fill:#d4ffd4,stroke:#2e7d32,stroke-width:1px;
 classDef rechazado fill:#ffd6d6,stroke:#c62828,stroke-width:1px;
 classDef attr fill:#eef2ff,stroke:#4f46e5,stroke-width:1px;
