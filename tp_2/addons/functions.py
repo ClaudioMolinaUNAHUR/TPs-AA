@@ -167,3 +167,22 @@ def bootstrap_train(train, attrs, forrest_length, q_attrs=None):
         })
     
     return bootstraps
+
+def calculate_tree_accuracy(tree, data, concepto, condicion_cumplida):
+
+    correct_predictions = 0
+    total_predictions = len(data)
+    
+    for row in data:
+        prediction = predict_id3(row, tree)
+        actual = row[concepto]
+        
+     
+        predicted_binary = 1 if prediction == condicion_cumplida else 0
+        actual_binary = 1 if actual == condicion_cumplida else 0
+        
+        if predicted_binary == actual_binary:
+            correct_predictions += 1
+    
+    return correct_predictions / total_predictions if total_predictions > 0 else 0
+

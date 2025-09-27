@@ -231,3 +231,53 @@ def filter_data_prestamo(data, attrs, concepto, ages, between=False):
                 }
             )
     return result
+
+
+
+def plot_precision_vs_tree_size(node_counts, train_accuracies, test_accuracies, path):
+   
+    plt.figure(figsize=(10, 6))
+    
+    
+    sorted_indices = np.argsort(node_counts)
+    sorted_nodes = [node_counts[i] for i in sorted_indices]
+    sorted_train_acc = [train_accuracies[i] for i in sorted_indices]
+    sorted_test_acc = [test_accuracies[i] for i in sorted_indices]
+    
+
+    plt.plot(sorted_nodes, sorted_train_acc, 'o-', label='Entrenamiento', color='blue', linewidth=2, markersize=6)
+    plt.plot(sorted_nodes, sorted_test_acc, 's-', label='Prueba', color='red', linewidth=2, markersize=6)
+    
+
+    plt.xlabel('Número de Nodos Internos del Árbol', fontsize=12)
+    plt.ylabel('Precisión', fontsize=12)
+    plt.title('Precisión vs Tamaño del Árbol\n(Entrenamiento vs Prueba)', fontsize=14, fontweight='bold')
+    plt.legend(fontsize=11)
+    plt.grid(True, alpha=0.3)
+    
+   
+    all_accuracies = sorted_train_acc + sorted_test_acc
+    plt.ylim(min(all_accuracies) - 0.05, min(1.0, max(all_accuracies) + 0.05))
+    
+   
+    if len(sorted_nodes) > 0:
+        min_nodes = min(node_counts)
+        max_nodes = max(node_counts)
+        
+        plt.annotate(f'Min: {min_nodes} nodos', 
+                    xy=(min_nodes, min(train_accuracies)), 
+                    xytext=(10, 10), textcoords='offset points',
+                    bbox=dict(boxstyle='round,pad=0.3', facecolor='yellow', alpha=0.7),
+                    fontsize=9)
+        
+        plt.annotate(f'Max: {max_nodes} nodos', 
+                    xy=(max_nodes, max(train_accuracies)), 
+                    xytext=(10, -20), textcoords='offset points',
+                    bbox=dict(boxstyle='round,pad=0.3', facecolor='lightgreen', alpha=0.7),
+                    fontsize=9)
+    
+    plt.tight_layout()
+    plt.savefig(path, dpi=300, bbox_inches='tight')
+    plt.show()
+    
+    print(f"Gráfico guardado como: {path}")
