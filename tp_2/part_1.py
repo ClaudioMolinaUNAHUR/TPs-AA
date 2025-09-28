@@ -14,7 +14,7 @@ from tp_2.addons.functions import discrete_id3, predict_id3
 
 def tp2_part_1():
     file_path = "./tp_1/Préstamo.csv"
-    file_path_tree = "./tp_2/tree.json"
+    file_path_tree = "./tp_2/results/tree.json"
     data = cargar_csv(file_path, "latin-1")
 
     attrs = [

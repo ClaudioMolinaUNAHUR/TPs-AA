@@ -1,25 +1,11 @@
 {
   "Préstamos previos impagos": {
-    "SI": "RECHAZADO",
     "NO": {
       "Estado de vivienda": {
         "INQUILINO": {
           "Mayor nivel educativo": {
             "SECUNDARIO": {
               "Destino de los fondos": {
-                "EDUCACION": {
-                  "Sexo": {
-                    "MASCULINO": "OTORGADO",
-                    "FEMENINO": "OTORGADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9402859586706311,
-                    "class": {
-                      "OTORGADO": 9,
-                      "RECHAZADO": 5
-                    }
-                  }
-                },
                 "VIVIENDA": {
                   "Sexo": {
                     "MASCULINO": "OTORGADO",
@@ -30,19 +16,6 @@
                     "class": {
                       "OTORGADO": 9,
                       "RECHAZADO": 7
-                    }
-                  }
-                },
-                "PERSONAL": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "OTORGADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9852281360342516,
-                    "class": {
-                      "OTORGADO": 12,
-                      "RECHAZADO": 9
                     }
                   }
                 },
@@ -72,6 +45,32 @@
                     }
                   }
                 },
+                "PERSONAL": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "OTORGADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9852281360342516,
+                    "class": {
+                      "OTORGADO": 12,
+                      "RECHAZADO": 9
+                    }
+                  }
+                },
+                "EDUCACION": {
+                  "Sexo": {
+                    "MASCULINO": "OTORGADO",
+                    "FEMENINO": "OTORGADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9402859586706311,
+                    "class": {
+                      "OTORGADO": 9,
+                      "RECHAZADO": 5
+                    }
+                  }
+                },
                 "SALUD": {
                   "Sexo": {
                     "MASCULINO": "RECHAZADO",
@@ -96,6 +95,26 @@
             },
             "MAESTRíA": {
               "Destino de los fondos": {
+                "VIVIENDA": {
+                  "Sexo": {
+                    "MASCULINO": "OTORGADO",
+                    "FEMENINO": "OTORGADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9709505944546686,
+                    "class": {
+                      "OTORGADO": 3,
+                      "RECHAZADO": 2
+                    },
+                    "pure_children": [
+                      {
+                        "value": "FEMENINO",
+                        "entropy": 0,
+                        "count": 1
+                      }
+                    ]
+                  }
+                },
                 "EMPRESA": {
                   "Sexo": {
                     "MASCULINO": "OTORGADO",
@@ -106,6 +125,32 @@
                     "class": {
                       "OTORGADO": 3,
                       "RECHAZADO": 2
+                    }
+                  }
+                },
+                "DEUDAS": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9182958340544896,
+                    "class": {
+                      "OTORGADO": 3,
+                      "RECHAZADO": 6
+                    }
+                  }
+                },
+                "PERSONAL": {
+                  "Sexo": {
+                    "MASCULINO": "OTORGADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9852281360342516,
+                    "class": {
+                      "OTORGADO": 3,
+                      "RECHAZADO": 4
                     }
                   }
                 },
@@ -127,52 +172,6 @@
                         "count": 1
                       }
                     ]
-                  }
-                },
-                "PERSONAL": {
-                  "Sexo": {
-                    "MASCULINO": "OTORGADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9852281360342516,
-                    "class": {
-                      "OTORGADO": 3,
-                      "RECHAZADO": 4
-                    }
-                  }
-                },
-                "VIVIENDA": {
-                  "Sexo": {
-                    "MASCULINO": "OTORGADO",
-                    "FEMENINO": "OTORGADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9709505944546686,
-                    "class": {
-                      "OTORGADO": 3,
-                      "RECHAZADO": 2
-                    },
-                    "pure_children": [
-                      {
-                        "value": "FEMENINO",
-                        "entropy": 0,
-                        "count": 1
-                      }
-                    ]
-                  }
-                },
-                "DEUDAS": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9182958340544896,
-                    "class": {
-                      "OTORGADO": 3,
-                      "RECHAZADO": 6
-                    }
                   }
                 },
                 "SALUD": {
@@ -219,51 +218,6 @@
                     ]
                   }
                 },
-                "EDUCACION": {
-                  "Sexo": {
-                    "MASCULINO": "OTORGADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.8112781244591328,
-                    "class": {
-                      "OTORGADO": 2,
-                      "RECHAZADO": 6
-                    },
-                    "pure_children": [
-                      {
-                        "value": "MASCULINO",
-                        "entropy": 0,
-                        "count": 2
-                      },
-                      {
-                        "value": "FEMENINO",
-                        "entropy": 0,
-                        "count": 6
-                      }
-                    ]
-                  }
-                },
-                "PERSONAL": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.6500224216483541,
-                    "class": {
-                      "RECHAZADO": 5,
-                      "OTORGADO": 1
-                    },
-                    "pure_children": [
-                      {
-                        "value": "MASCULINO",
-                        "entropy": 0,
-                        "count": 3
-                      }
-                    ]
-                  }
-                },
                 "EMPRESA": {
                   "Sexo": {
                     "MASCULINO": "OTORGADO",
@@ -290,6 +244,51 @@
                     }
                   }
                 },
+                "PERSONAL": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.6500224216483541,
+                    "class": {
+                      "RECHAZADO": 5,
+                      "OTORGADO": 1
+                    },
+                    "pure_children": [
+                      {
+                        "value": "MASCULINO",
+                        "entropy": 0,
+                        "count": 3
+                      }
+                    ]
+                  }
+                },
+                "EDUCACION": {
+                  "Sexo": {
+                    "MASCULINO": "OTORGADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.8112781244591328,
+                    "class": {
+                      "OTORGADO": 2,
+                      "RECHAZADO": 6
+                    },
+                    "pure_children": [
+                      {
+                        "value": "MASCULINO",
+                        "entropy": 0,
+                        "count": 2
+                      },
+                      {
+                        "value": "FEMENINO",
+                        "entropy": 0,
+                        "count": 6
+                      }
+                    ]
+                  }
+                },
                 "SALUD": {
                   "Sexo": {
                     "MASCULINO": "OTORGADO",
@@ -312,104 +311,8 @@
                 }
               }
             },
-            "DOCTORADO": {
-              "Destino de los fondos": {
-                "EDUCACION": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "OTORGADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9182958340544896,
-                    "class": {
-                      "OTORGADO": 1,
-                      "RECHAZADO": 2
-                    },
-                    "pure_children": [
-                      {
-                        "value": "MASCULINO",
-                        "entropy": 0,
-                        "count": 2
-                      },
-                      {
-                        "value": "FEMENINO",
-                        "entropy": 0,
-                        "count": 1
-                      }
-                    ]
-                  }
-                },
-                "VIVIENDA": {
-                  "Sexo": {
-                    "MASCULINO": "OTORGADO",
-                    "FEMENINO": "OTORGADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.8112781244591328,
-                    "class": {
-                      "OTORGADO": 3,
-                      "RECHAZADO": 1
-                    },
-                    "pure_children": [
-                      {
-                        "value": "MASCULINO",
-                        "entropy": 0,
-                        "count": 2
-                      }
-                    ]
-                  }
-                },
-                "PERSONAL": "RECHAZADO",
-                "EMPRESA": "RECHAZADO",
-                "SALUD": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9182958340544896,
-                    "class": {
-                      "RECHAZADO": 6,
-                      "OTORGADO": 3
-                    }
-                  }
-                }
-              },
-              "metrics": {
-                "entropy": 0.934068055375491,
-                "class": {
-                  "OTORGADO": 7,
-                  "RECHAZADO": 13
-                },
-                "pure_children": [
-                  {
-                    "value": "PERSONAL",
-                    "entropy": 0,
-                    "count": 3
-                  },
-                  {
-                    "value": "EMPRESA",
-                    "entropy": 0,
-                    "count": 1
-                  }
-                ]
-              }
-            },
             "TERCIARIO": {
               "Destino de los fondos": {
-                "EDUCACION": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9876925088958034,
-                    "class": {
-                      "RECHAZADO": 13,
-                      "OTORGADO": 10
-                    }
-                  }
-                },
                 "VIVIENDA": {
                   "Sexo": {
                     "MASCULINO": "OTORGADO",
@@ -420,19 +323,6 @@
                     "class": {
                       "OTORGADO": 7,
                       "RECHAZADO": 4
-                    }
-                  }
-                },
-                "PERSONAL": {
-                  "Sexo": {
-                    "MASCULINO": "OTORGADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 1.0,
-                    "class": {
-                      "RECHAZADO": 9,
-                      "OTORGADO": 9
                     }
                   }
                 },
@@ -462,6 +352,32 @@
                     }
                   }
                 },
+                "PERSONAL": {
+                  "Sexo": {
+                    "MASCULINO": "OTORGADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 1.0,
+                    "class": {
+                      "RECHAZADO": 9,
+                      "OTORGADO": 9
+                    }
+                  }
+                },
+                "EDUCACION": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9876925088958034,
+                    "class": {
+                      "RECHAZADO": 13,
+                      "OTORGADO": 10
+                    }
+                  }
+                },
                 "SALUD": {
                   "Sexo": {
                     "MASCULINO": "OTORGADO",
@@ -483,6 +399,89 @@
                   "RECHAZADO": 59
                 }
               }
+            },
+            "DOCTORADO": {
+              "Destino de los fondos": {
+                "VIVIENDA": {
+                  "Sexo": {
+                    "MASCULINO": "OTORGADO",
+                    "FEMENINO": "OTORGADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.8112781244591328,
+                    "class": {
+                      "OTORGADO": 3,
+                      "RECHAZADO": 1
+                    },
+                    "pure_children": [
+                      {
+                        "value": "MASCULINO",
+                        "entropy": 0,
+                        "count": 2
+                      }
+                    ]
+                  }
+                },
+                "EMPRESA": "RECHAZADO",
+                "PERSONAL": "RECHAZADO",
+                "EDUCACION": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "OTORGADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9182958340544896,
+                    "class": {
+                      "OTORGADO": 1,
+                      "RECHAZADO": 2
+                    },
+                    "pure_children": [
+                      {
+                        "value": "MASCULINO",
+                        "entropy": 0,
+                        "count": 2
+                      },
+                      {
+                        "value": "FEMENINO",
+                        "entropy": 0,
+                        "count": 1
+                      }
+                    ]
+                  }
+                },
+                "SALUD": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9182958340544896,
+                    "class": {
+                      "RECHAZADO": 6,
+                      "OTORGADO": 3
+                    }
+                  }
+                }
+              },
+              "metrics": {
+                "entropy": 0.934068055375491,
+                "class": {
+                  "OTORGADO": 7,
+                  "RECHAZADO": 13
+                },
+                "pure_children": [
+                  {
+                    "value": "EMPRESA",
+                    "entropy": 0,
+                    "count": 1
+                  },
+                  {
+                    "value": "PERSONAL",
+                    "entropy": 0,
+                    "count": 3
+                  }
+                ]
+              }
             }
           },
           "metrics": {
@@ -493,150 +492,15 @@
             }
           }
         },
-        "PROPIETARIO": {
-          "Mayor nivel educativo": {
-            "SECUNDARIO": {
-              "Destino de los fondos": {
-                "EDUCACION": "RECHAZADO",
-                "VIVIENDA": {
-                  "Sexo": {
-                    "MASCULINO": "OTORGADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9182958340544896,
-                    "class": {
-                      "OTORGADO": 1,
-                      "RECHAZADO": 2
-                    },
-                    "pure_children": [
-                      {
-                        "value": "FEMENINO",
-                        "entropy": 0,
-                        "count": 1
-                      }
-                    ]
-                  }
-                },
-                "PERSONAL": "RECHAZADO",
-                "EMPRESA": "RECHAZADO",
-                "SALUD": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9182958340544896,
-                    "class": {
-                      "RECHAZADO": 2,
-                      "OTORGADO": 1
-                    }
-                  }
-                }
-              },
-              "metrics": {
-                "entropy": 0.5435644431995964,
-                "class": {
-                  "OTORGADO": 2,
-                  "RECHAZADO": 14
-                },
-                "pure_children": [
-                  {
-                    "value": "EDUCACION",
-                    "entropy": 0,
-                    "count": 3
-                  },
-                  {
-                    "value": "PERSONAL",
-                    "entropy": 0,
-                    "count": 3
-                  },
-                  {
-                    "value": "EMPRESA",
-                    "entropy": 0,
-                    "count": 4
-                  }
-                ]
-              }
-            },
-            "MAESTRíA": "RECHAZADO",
-            "UNIVERSITARIO": "RECHAZADO",
-            "DOCTORADO": "OTORGADO",
-            "TERCIARIO": {
-              "Destino de los fondos": {
-                "PERSONAL": "RECHAZADO",
-                "EMPRESA": "RECHAZADO",
-                "EDUCACION": {
-                  "Sexo": {
-                    "MASCULINO": "OTORGADO"
-                  },
-                  "metrics": {
-                    "entropy": 1.0,
-                    "class": {
-                      "OTORGADO": 1,
-                      "RECHAZADO": 1
-                    }
-                  }
-                },
-                "SALUD": "RECHAZADO"
-              },
-              "metrics": {
-                "entropy": 0.5916727785823275,
-                "class": {
-                  "OTORGADO": 1,
-                  "RECHAZADO": 6
-                },
-                "pure_children": [
-                  {
-                    "value": "PERSONAL",
-                    "entropy": 0,
-                    "count": 1
-                  },
-                  {
-                    "value": "EMPRESA",
-                    "entropy": 0,
-                    "count": 3
-                  },
-                  {
-                    "value": "SALUD",
-                    "entropy": 0,
-                    "count": 1
-                  }
-                ]
-              }
-            }
-          },
-          "metrics": {
-            "entropy": 0.5328350630342235,
-            "class": {
-              "OTORGADO": 4,
-              "RECHAZADO": 29
-            },
-            "pure_children": [
-              {
-                "value": "MAESTRíA",
-                "entropy": 0,
-                "count": 4
-              },
-              {
-                "value": "UNIVERSITARIO",
-                "entropy": 0,
-                "count": 5
-              },
-              {
-                "value": "DOCTORADO",
-                "entropy": 0,
-                "count": 1
-              }
-            ]
-          }
-        },
         "OTRO": {
           "Mayor nivel educativo": {
+            "SECUNDARIO": "OTORGADO",
+            "UNIVERSITARIO": "RECHAZADO",
             "TERCIARIO": {
               "Destino de los fondos": {
+                "VIVIENDA": "RECHAZADO",
                 "PERSONAL": "OTORGADO",
-                "EDUCACION": "OTORGADO",
-                "VIVIENDA": "RECHAZADO"
+                "EDUCACION": "OTORGADO"
               },
               "metrics": {
                 "entropy": 1.0,
@@ -646,6 +510,11 @@
                 },
                 "pure_children": [
                   {
+                    "value": "VIVIENDA",
+                    "entropy": 0,
+                    "count": 2
+                  },
+                  {
                     "value": "PERSONAL",
                     "entropy": 0,
                     "count": 1
@@ -654,17 +523,10 @@
                     "value": "EDUCACION",
                     "entropy": 0,
                     "count": 1
-                  },
-                  {
-                    "value": "VIVIENDA",
-                    "entropy": 0,
-                    "count": 2
                   }
                 ]
               }
-            },
-            "SECUNDARIO": "OTORGADO",
-            "UNIVERSITARIO": "RECHAZADO"
+            }
           },
           "metrics": {
             "entropy": 0.9852281360342516,
@@ -688,114 +550,8 @@
         },
         "HIPOTECA": {
           "Destino de los fondos": {
-            "EDUCACION": {
-              "Mayor nivel educativo": {
-                "SECUNDARIO": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.37123232664087563,
-                    "class": {
-                      "RECHAZADO": 13,
-                      "OTORGADO": 1
-                    },
-                    "pure_children": [
-                      {
-                        "value": "FEMENINO",
-                        "entropy": 0,
-                        "count": 2
-                      }
-                    ]
-                  }
-                },
-                "MAESTRíA": "OTORGADO",
-                "UNIVERSITARIO": "RECHAZADO",
-                "DOCTORADO": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9182958340544896,
-                    "class": {
-                      "RECHAZADO": 2,
-                      "OTORGADO": 1
-                    },
-                    "pure_children": [
-                      {
-                        "value": "FEMENINO",
-                        "entropy": 0,
-                        "count": 1
-                      }
-                    ]
-                  }
-                },
-                "TERCIARIO": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.6500224216483541,
-                    "class": {
-                      "RECHAZADO": 10,
-                      "OTORGADO": 2
-                    },
-                    "pure_children": [
-                      {
-                        "value": "FEMENINO",
-                        "entropy": 0,
-                        "count": 5
-                      }
-                    ]
-                  }
-                }
-              },
-              "metrics": {
-                "entropy": 0.6136190195993708,
-                "class": {
-                  "RECHAZADO": 28,
-                  "OTORGADO": 5
-                },
-                "pure_children": [
-                  {
-                    "value": "MAESTRíA",
-                    "entropy": 0,
-                    "count": 1
-                  },
-                  {
-                    "value": "UNIVERSITARIO",
-                    "entropy": 0,
-                    "count": 3
-                  }
-                ]
-              }
-            },
             "VIVIENDA": {
               "Mayor nivel educativo": {
-                "DOCTORADO": "RECHAZADO",
-                "TERCIARIO": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.37123232664087563,
-                    "class": {
-                      "RECHAZADO": 13,
-                      "OTORGADO": 1
-                    },
-                    "pure_children": [
-                      {
-                        "value": "FEMENINO",
-                        "entropy": 0,
-                        "count": 8
-                      }
-                    ]
-                  }
-                },
                 "SECUNDARIO": {
                   "Sexo": {
                     "MASCULINO": "RECHAZADO",
@@ -835,7 +591,28 @@
                       }
                     ]
                   }
-                }
+                },
+                "TERCIARIO": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.37123232664087563,
+                    "class": {
+                      "RECHAZADO": 13,
+                      "OTORGADO": 1
+                    },
+                    "pure_children": [
+                      {
+                        "value": "FEMENINO",
+                        "entropy": 0,
+                        "count": 8
+                      }
+                    ]
+                  }
+                },
+                "DOCTORADO": "RECHAZADO"
               },
               "metrics": {
                 "entropy": 0.7088356733321961,
@@ -848,6 +625,140 @@
                     "value": "DOCTORADO",
                     "entropy": 0,
                     "count": 2
+                  }
+                ]
+              }
+            },
+            "EMPRESA": {
+              "Mayor nivel educativo": {
+                "SECUNDARIO": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9402859586706311,
+                    "class": {
+                      "RECHAZADO": 9,
+                      "OTORGADO": 5
+                    }
+                  }
+                },
+                "MAESTRíA": "RECHAZADO",
+                "UNIVERSITARIO": "RECHAZADO",
+                "TERCIARIO": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.5435644431995964,
+                    "class": {
+                      "RECHAZADO": 7,
+                      "OTORGADO": 1
+                    },
+                    "pure_children": [
+                      {
+                        "value": "FEMENINO",
+                        "entropy": 0,
+                        "count": 1
+                      }
+                    ]
+                  }
+                },
+                "DOCTORADO": "RECHAZADO"
+              },
+              "metrics": {
+                "entropy": 0.5916727785823275,
+                "class": {
+                  "RECHAZADO": 36,
+                  "OTORGADO": 6
+                },
+                "pure_children": [
+                  {
+                    "value": "MAESTRíA",
+                    "entropy": 0,
+                    "count": 7
+                  },
+                  {
+                    "value": "UNIVERSITARIO",
+                    "entropy": 0,
+                    "count": 10
+                  },
+                  {
+                    "value": "DOCTORADO",
+                    "entropy": 0,
+                    "count": 3
+                  }
+                ]
+              }
+            },
+            "DEUDAS": {
+              "Mayor nivel educativo": {
+                "SECUNDARIO": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "OTORGADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9957274520849256,
+                    "class": {
+                      "RECHAZADO": 7,
+                      "OTORGADO": 6
+                    }
+                  }
+                },
+                "MAESTRíA": "RECHAZADO",
+                "UNIVERSITARIO": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.8112781244591328,
+                    "class": {
+                      "RECHAZADO": 3,
+                      "OTORGADO": 1
+                    },
+                    "pure_children": [
+                      {
+                        "value": "FEMENINO",
+                        "entropy": 0,
+                        "count": 1
+                      }
+                    ]
+                  }
+                },
+                "TERCIARIO": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9640787648082291,
+                    "class": {
+                      "RECHAZADO": 11,
+                      "OTORGADO": 7
+                    }
+                  }
+                },
+                "DOCTORADO": "OTORGADO"
+              },
+              "metrics": {
+                "entropy": 0.9740248644357521,
+                "class": {
+                  "RECHAZADO": 22,
+                  "OTORGADO": 15
+                },
+                "pure_children": [
+                  {
+                    "value": "MAESTRíA",
+                    "entropy": 0,
+                    "count": 1
+                  },
+                  {
+                    "value": "DOCTORADO",
+                    "entropy": 0,
+                    "count": 1
                   }
                 ]
               }
@@ -919,6 +830,19 @@
                     ]
                   }
                 },
+                "TERCIARIO": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.863120568566631,
+                    "class": {
+                      "RECHAZADO": 5,
+                      "OTORGADO": 2
+                    }
+                  }
+                },
                 "DOCTORADO": {
                   "Sexo": {
                     "MASCULINO": "RECHAZADO",
@@ -938,19 +862,6 @@
                       }
                     ]
                   }
-                },
-                "TERCIARIO": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.863120568566631,
-                    "class": {
-                      "RECHAZADO": 5,
-                      "OTORGADO": 2
-                    }
-                  }
                 }
               },
               "metrics": {
@@ -961,32 +872,59 @@
                 }
               }
             },
-            "EMPRESA": {
+            "EDUCACION": {
               "Mayor nivel educativo": {
                 "SECUNDARIO": {
                   "Sexo": {
-                    "MASCULINO": "RECHAZADO"
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
                   },
                   "metrics": {
-                    "entropy": 0.9402859586706311,
+                    "entropy": 0.37123232664087563,
                     "class": {
-                      "RECHAZADO": 9,
-                      "OTORGADO": 5
-                    }
+                      "RECHAZADO": 13,
+                      "OTORGADO": 1
+                    },
+                    "pure_children": [
+                      {
+                        "value": "FEMENINO",
+                        "entropy": 0,
+                        "count": 2
+                      }
+                    ]
                   }
                 },
-                "MAESTRíA": "RECHAZADO",
+                "MAESTRíA": "OTORGADO",
                 "UNIVERSITARIO": "RECHAZADO",
-                "DOCTORADO": "RECHAZADO",
                 "TERCIARIO": {
                   "Sexo": {
                     "MASCULINO": "RECHAZADO",
                     "FEMENINO": "RECHAZADO"
                   },
                   "metrics": {
-                    "entropy": 0.5435644431995964,
+                    "entropy": 0.6500224216483541,
                     "class": {
-                      "RECHAZADO": 7,
+                      "RECHAZADO": 10,
+                      "OTORGADO": 2
+                    },
+                    "pure_children": [
+                      {
+                        "value": "FEMENINO",
+                        "entropy": 0,
+                        "count": 5
+                      }
+                    ]
+                  }
+                },
+                "DOCTORADO": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9182958340544896,
+                    "class": {
+                      "RECHAZADO": 2,
                       "OTORGADO": 1
                     },
                     "pure_children": [
@@ -1000,97 +938,21 @@
                 }
               },
               "metrics": {
-                "entropy": 0.5916727785823275,
+                "entropy": 0.6136190195993708,
                 "class": {
-                  "RECHAZADO": 36,
-                  "OTORGADO": 6
+                  "RECHAZADO": 28,
+                  "OTORGADO": 5
                 },
                 "pure_children": [
                   {
                     "value": "MAESTRíA",
                     "entropy": 0,
-                    "count": 7
+                    "count": 1
                   },
                   {
                     "value": "UNIVERSITARIO",
                     "entropy": 0,
-                    "count": 10
-                  },
-                  {
-                    "value": "DOCTORADO",
-                    "entropy": 0,
                     "count": 3
-                  }
-                ]
-              }
-            },
-            "DEUDAS": {
-              "Mayor nivel educativo": {
-                "SECUNDARIO": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "OTORGADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9957274520849256,
-                    "class": {
-                      "RECHAZADO": 7,
-                      "OTORGADO": 6
-                    }
-                  }
-                },
-                "MAESTRíA": "RECHAZADO",
-                "UNIVERSITARIO": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.8112781244591328,
-                    "class": {
-                      "RECHAZADO": 3,
-                      "OTORGADO": 1
-                    },
-                    "pure_children": [
-                      {
-                        "value": "FEMENINO",
-                        "entropy": 0,
-                        "count": 1
-                      }
-                    ]
-                  }
-                },
-                "DOCTORADO": "OTORGADO",
-                "TERCIARIO": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.9640787648082291,
-                    "class": {
-                      "RECHAZADO": 11,
-                      "OTORGADO": 7
-                    }
-                  }
-                }
-              },
-              "metrics": {
-                "entropy": 0.9740248644357521,
-                "class": {
-                  "RECHAZADO": 22,
-                  "OTORGADO": 15
-                },
-                "pure_children": [
-                  {
-                    "value": "MAESTRíA",
-                    "entropy": 0,
-                    "count": 1
-                  },
-                  {
-                    "value": "DOCTORADO",
-                    "entropy": 0,
-                    "count": 1
                   }
                 ]
               }
@@ -1143,6 +1005,19 @@
                     }
                   }
                 },
+                "TERCIARIO": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.8865408928220899,
+                    "class": {
+                      "RECHAZADO": 16,
+                      "OTORGADO": 7
+                    }
+                  }
+                },
                 "DOCTORADO": {
                   "Sexo": {
                     "MASCULINO": "RECHAZADO",
@@ -1162,19 +1037,6 @@
                       }
                     ]
                   }
-                },
-                "TERCIARIO": {
-                  "Sexo": {
-                    "MASCULINO": "RECHAZADO",
-                    "FEMENINO": "RECHAZADO"
-                  },
-                  "metrics": {
-                    "entropy": 0.8865408928220899,
-                    "class": {
-                      "RECHAZADO": 16,
-                      "OTORGADO": 7
-                    }
-                  }
                 }
               },
               "metrics": {
@@ -1193,6 +1055,143 @@
               "RECHAZADO": 167
             }
           }
+        },
+        "PROPIETARIO": {
+          "Mayor nivel educativo": {
+            "SECUNDARIO": {
+              "Destino de los fondos": {
+                "VIVIENDA": {
+                  "Sexo": {
+                    "MASCULINO": "OTORGADO",
+                    "FEMENINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9182958340544896,
+                    "class": {
+                      "OTORGADO": 1,
+                      "RECHAZADO": 2
+                    },
+                    "pure_children": [
+                      {
+                        "value": "FEMENINO",
+                        "entropy": 0,
+                        "count": 1
+                      }
+                    ]
+                  }
+                },
+                "EMPRESA": "RECHAZADO",
+                "PERSONAL": "RECHAZADO",
+                "EDUCACION": "RECHAZADO",
+                "SALUD": {
+                  "Sexo": {
+                    "MASCULINO": "RECHAZADO"
+                  },
+                  "metrics": {
+                    "entropy": 0.9182958340544896,
+                    "class": {
+                      "RECHAZADO": 2,
+                      "OTORGADO": 1
+                    }
+                  }
+                }
+              },
+              "metrics": {
+                "entropy": 0.5435644431995964,
+                "class": {
+                  "OTORGADO": 2,
+                  "RECHAZADO": 14
+                },
+                "pure_children": [
+                  {
+                    "value": "EMPRESA",
+                    "entropy": 0,
+                    "count": 4
+                  },
+                  {
+                    "value": "PERSONAL",
+                    "entropy": 0,
+                    "count": 3
+                  },
+                  {
+                    "value": "EDUCACION",
+                    "entropy": 0,
+                    "count": 3
+                  }
+                ]
+              }
+            },
+            "MAESTRíA": "RECHAZADO",
+            "UNIVERSITARIO": "RECHAZADO",
+            "TERCIARIO": {
+              "Destino de los fondos": {
+                "SALUD": "RECHAZADO",
+                "PERSONAL": "RECHAZADO",
+                "EDUCACION": {
+                  "Sexo": {
+                    "MASCULINO": "OTORGADO"
+                  },
+                  "metrics": {
+                    "entropy": 1.0,
+                    "class": {
+                      "OTORGADO": 1,
+                      "RECHAZADO": 1
+                    }
+                  }
+                },
+                "EMPRESA": "RECHAZADO"
+              },
+              "metrics": {
+                "entropy": 0.5916727785823275,
+                "class": {
+                  "OTORGADO": 1,
+                  "RECHAZADO": 6
+                },
+                "pure_children": [
+                  {
+                    "value": "SALUD",
+                    "entropy": 0,
+                    "count": 1
+                  },
+                  {
+                    "value": "PERSONAL",
+                    "entropy": 0,
+                    "count": 1
+                  },
+                  {
+                    "value": "EMPRESA",
+                    "entropy": 0,
+                    "count": 3
+                  }
+                ]
+              }
+            },
+            "DOCTORADO": "OTORGADO"
+          },
+          "metrics": {
+            "entropy": 0.5328350630342235,
+            "class": {
+              "OTORGADO": 4,
+              "RECHAZADO": 29
+            },
+            "pure_children": [
+              {
+                "value": "MAESTRíA",
+                "entropy": 0,
+                "count": 4
+              },
+              {
+                "value": "UNIVERSITARIO",
+                "entropy": 0,
+                "count": 5
+              },
+              {
+                "value": "DOCTORADO",
+                "entropy": 0,
+                "count": 1
+              }
+            ]
+          }
         }
       },
       "metrics": {
@@ -1202,7 +1201,8 @@
           "RECHAZADO": 371
         }
       }
-    }
+    },
+    "SI": "RECHAZADO"
   },
   "metrics": {
     "entropy": 0.7271601329998649,

@@ -14,7 +14,7 @@ from tp_1.addons.functions import discrete_naive_bayes
 
 def part_3():
     file_path = "./tp_1/Préstamo.csv"
-    file_path_roc = "./tp_1/roc_curve.png"
+    file_path_roc = "./tp_1/results/roc_curve.png"
     data = cargar_csv(file_path, "latin-1")
 
     attrs = [

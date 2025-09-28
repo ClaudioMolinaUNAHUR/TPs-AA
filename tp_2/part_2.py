@@ -19,7 +19,7 @@ from tp_2.addons.functions import (
 
 def tp2_part_2():
     file_path = "./tp_1/Préstamo.csv"
-    file_path_precision = "./tp_2/precision_vs_tree_size.png"
+    file_path_precision = "./tp_2/results/precision_vs_tree_size.png"
     data = cargar_csv(file_path, "latin-1")
 
     attrs = [
