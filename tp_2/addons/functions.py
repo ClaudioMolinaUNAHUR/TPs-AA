@@ -47,7 +47,6 @@ def predict_random_forest_id3(data, forrest, condicion_cumplida, prediction_colu
         prediction = positive_votes / total_votes if total_votes > 0 else 0
 
         row[prediction_column] = 1 if prediction >= 0.5 else 0
-    return None
 
 
 def entropia(data, target_attr):
