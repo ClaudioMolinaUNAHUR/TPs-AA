@@ -30,11 +30,11 @@ def predict_id3(data, tree):
         return max(class_counts, key=class_counts.get)
 
 
-def predict_random_forest_id3(data, forrest, condicion_cumplida, prediction_column):
+def predict_random_forest_id3(data, forest, condicion_cumplida, prediction_column):
 
     for row in data:
         predictions = []
-        for tree in forrest:
+        for tree in forest:
             clase = predict_id3(row, tree)
             if clase is not None:
                 predictions.append(1 if condicion_cumplida == clase else 0)
@@ -151,7 +151,7 @@ def mayoritary_class(clases):
     return class_value
 
 
-def bootstrap_train(train, attrs, forrest_length, q_attrs=0, func_sqrt=True):
+def bootstrap_train(train, attrs, forest_length, q_attrs=0, func_sqrt=True):
 
     bootstraps = []
     len_train = len(train)
@@ -162,7 +162,7 @@ def bootstrap_train(train, attrs, forrest_length, q_attrs=0, func_sqrt=True):
         q_attrs = math.log(len(attrs), 2) if func_sqrt else math.sqrt(len(attrs))
         q_attrs = max(1, int(q_attrs))  
 
-    for i in range(forrest_length):
+    for i in range(forest_length):
         selected_attrs = []
         
         #Mezclar Atributos

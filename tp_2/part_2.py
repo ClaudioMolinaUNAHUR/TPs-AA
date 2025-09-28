@@ -32,29 +32,19 @@ def tp2_part_2():
     concepto = "Estado"
     condicion_cumplida = "OTORGADO"
     prediction_column = "prediction"
-    forrest_length = 10
-    random_forrest = []
+    forest_length = 10
+    random_forest = []
 
     result = filter_data_prestamo(data, attrs, concepto, ages=[40, 45], between=True)
     test, train = split_test_data(result, test_size=0.20)
 
-    bootstraps = bootstrap_train(train, attrs, forrest_length, q_attrs=3)
-
-    print("=== CONFIGURACIÓN RANDOM FOREST ===")
-    print(f"Número de árboles: {forrest_length}")
-    print(f"Atributos originales: {len(attrs)}")
-    print(f"Test: {len(test)} muestras")
-    print(f"Train: {len(train)} muestras")
-    print(f"Total: {len(result)} muestras")
-    print()
+    bootstraps = bootstrap_train(train, attrs, forest_length, q_attrs=4)
 
     node_counts = []
     train_accuracies = []
     test_accuracies = []
 
-    for i in range(forrest_length):
-        print(f"  - Atributos seleccionados: {len(bootstraps[i]['attrs'])}")
-        print(f"  - Muestras bootstrap: {len(bootstraps[i]['train'])}")
+    for i in range(forest_length):
 
         node_count, tree = discrete_id3(
             bootstraps[i]["train"], bootstraps[i]["attrs"], concepto
@@ -69,20 +59,11 @@ def tp2_part_2():
         train_accuracies.append(train_acc)
         test_accuracies.append(test_acc)
 
-        random_forrest.append(tree)
-        print(f"  - Nodos internos: {node_count}")
-        print(f"  - Precisión entrenamiento: {train_acc:.4f}")
-        print(f"  - Precisión prueba: {test_acc:.4f}")
-        print(f"  - Atributos usados: {bootstraps[i]['attrs']}")
-        print()
-
-    print(f"=== ANÁLISIS DEL BOSQUE ===")
-    print(f"Conteos individuales: {node_counts}")
-    print()
+        random_forest.append(tree)
 
     # Realizar predicciones
     predict_random_forest_id3(
-        test, random_forrest, condicion_cumplida, prediction_column
+        test, random_forest, condicion_cumplida, prediction_column
     )
 
     confusion_matrix_result = confusion_matrix(
@@ -101,13 +82,6 @@ def tp2_part_2():
     plot_precision_vs_tree_size(
         node_counts, train_accuracies, test_accuracies, file_path_precision
     )
-
-    print("=== RESULTADOS ===")
-    print(f"Matriz de confusión: TP={tp}, TN={tn}, FP={fp}, FN={fn}")
-    print(f"Accuracy: {accuracy:.4f}")
-    print(f"Precision: {precision:.4f}")
-    print(f"Recall: {recall:.4f}")
-    print(f"F1-Score: {f1:.4f}")
 
     return {
         "accuracy": accuracy,
