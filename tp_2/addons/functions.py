@@ -165,9 +165,14 @@ def bootstrap_train(train, attrs, forrest_length, q_attrs=0, func_sqrt=True):
 
     for i in range(forrest_length):
         selected_attrs = []
-        for attr in attrs:
+        
+        #Mezclar Atributos
+        shuffled_attrs = attrs.copy()
+        random.shuffle(shuffled_attrs)
+        
+        for attr in shuffled_attrs:
             random_value = random.random()
-            if len(selected_attrs) <= q_attrs or (not use_sqrt and random_value >= 0.5):
+            if len(selected_attrs) < q_attrs or (not use_sqrt and random_value >= 0.5):
                 selected_attrs.append(attr)
 
         bootstrap_sample = []
