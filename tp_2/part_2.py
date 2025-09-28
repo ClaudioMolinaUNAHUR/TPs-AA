@@ -38,7 +38,7 @@ def tp2_part_2():
     result = filter_data_prestamo(data, attrs, concepto, ages=[40, 45], between=True)
     test, train = split_test_data(result, test_size=0.20)
 
-    bootstraps = bootstrap_train(train, attrs, forrest_length)
+    bootstraps = bootstrap_train(train, attrs, forrest_length, q_attrs=4)
 
     print("=== CONFIGURACIÓN RANDOM FOREST ===")
     print(f"Número de árboles: {forrest_length}")

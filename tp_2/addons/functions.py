@@ -2,17 +2,33 @@ from collections import Counter
 import math
 import random
 
+
 def predict_id3(data, tree):
-    esdict = isinstance(tree, dict)
+    if not isinstance(tree, dict):
+        return tree  # Es una hoja, devuelve la clase.
 
-    if not esdict:
-        return tree
+    # Encontrar el atributo de este nodo (la clave que no es 'metrics')
+    attribute = None
+    for key in tree:
+        if key != 'metrics':
+            attribute = key
+            break  # Encontramos el atributo, salimos del bucle
 
-    for key, value in tree.items():
-        if key != "metrics" and data[key] in value.keys():
-            return predict_id3(data, value[data[key]])
+    if attribute is None:
+        # No se encontró un atributo para dividir, usar la clase mayoritaria
+        class_counts = tree['metrics']['class']
+        return max(class_counts, key=class_counts.get)
 
-    return None
+    value_in_data = data.get(attribute)
+
+    # Si el valor del dato existe como una rama en el árbol, la seguimos.
+    if value_in_data in tree[attribute]:
+        return predict_id3(data, tree[attribute][value_in_data])
+    else:
+        # Dato no visto: no hay rama. Devolvemos la clase mayoritaria de este nodo.
+        class_counts = tree['metrics']['class']
+        return max(class_counts, key=class_counts.get)
+
 
 def predict_random_forest_id3(data, forrest, condicion_cumplida, prediction_column):
 
@@ -23,15 +39,14 @@ def predict_random_forest_id3(data, forrest, condicion_cumplida, prediction_colu
             if clase is not None:
                 predictions.append(1 if condicion_cumplida == clase else 0)
             else:
-              
+
                 predictions.append(0)
-        
-       
+
         positive_votes = sum(predictions)
         total_votes = len(predictions)
         prediction = positive_votes / total_votes if total_votes > 0 else 0
-        
-        row[prediction_column] = 1 if prediction > 0.5 else 0          
+
+        row[prediction_column] = 1 if prediction >= 0.5 else 0
     return None
 
 
@@ -67,13 +82,11 @@ def ganancia_informacion(data, attr, target_attr):
 
 
 def discrete_id3(data, attrs, target_attr):
-    clases = [row[target_attr] for row in data]    
-    
-    
+    clases = [row[target_attr] for row in data]
+
     if len(set(clases)) == 1:
         return 0, {"class": clases[0], "metrics": {"entropy": 0, "count": len(clases)}}
 
-  
     if not attrs:
         return 0, mayoritary_class(clases)
 
@@ -85,13 +98,12 @@ def discrete_id3(data, attrs, target_attr):
         mejor_attr: {},
         "metrics": {
             "entropy": entropia(data, target_attr),
-            "Class": Counter(clases),
+            "class": Counter(clases),
         },
     }
 
-  
     node_count = 1
-    
+
     # se crea conjunto de valores que toma ese atributo mejor rankeado dentro del conjunto de datos
     set_values = set()
     for row in data:
@@ -106,7 +118,7 @@ def discrete_id3(data, attrs, target_attr):
                 filter_by_value.append(row)
 
         if not filter_by_value:
-           
+
             arbol[mejor_attr][value] = mayoritary_class(clases)
         else:
             # se crea nueva lista de atributos sin el mejor, porque ya se consulto
@@ -118,11 +130,9 @@ def discrete_id3(data, attrs, target_attr):
             node_count += sub_count
             if isinstance(result, dict) and "class" in result:
                 arbol[mejor_attr][value] = result["class"]
-                arbol["metrics"].setdefault("pure_children", []).append({
-                    "value": value,
-                    "entropy": 0,
-                    "count": result["metrics"]["count"]
-                })
+                arbol["metrics"].setdefault("pure_children", []).append(
+                    {"value": value, "entropy": 0, "count": result["metrics"]["count"]}
+                )
             else:
                 arbol[mejor_attr][value] = result
 
@@ -142,47 +152,47 @@ def mayoritary_class(clases):
     return class_value
 
 
-def bootstrap_train(train, attrs, forrest_length, q_attrs=None):
-   
+def bootstrap_train(train, attrs, forrest_length, q_attrs=0, func_sqrt=True):
+
     bootstraps = []
     len_train = len(train)
-    
+    use_sqrt = False
+    if q_attrs == 0:
+        use_sqrt = True
+        # raiz de a | log de a
+        q_attrs = math.log(len(attrs), 2) if func_sqrt else math.sqrt(len(attrs))
+        q_attrs = max(1, int(q_attrs))  
 
-    if q_attrs is None:
-        q_attrs = max(1, int(math.sqrt(len(attrs)))) #raiz de a
-    
-    for i in range(forrest_length):     
-       
+    for i in range(forrest_length):
+        selected_attrs = []
+        for attr in attrs:
+            random_value = random.random()
+            if len(selected_attrs) <= q_attrs or (not use_sqrt and random_value >= 0.5):
+                selected_attrs.append(attr)
+
         bootstrap_sample = []
-        for _ in range(len_train): 
+        for _ in range(len_train):
             select_pos = random.randint(0, len_train - 1)
             bootstrap_sample.append(train[select_pos])
-        
-        
-        selected_attrs = random.sample(attrs, min(q_attrs, len(attrs)))
-        
-        bootstraps.append({
-            "attrs": selected_attrs,
-            "train": bootstrap_sample
-        })
-    
+
+        bootstraps.append({"attrs": selected_attrs, "train": bootstrap_sample})
+
     return bootstraps
+
 
 def calculate_tree_accuracy(tree, data, concepto, condicion_cumplida):
 
     correct_predictions = 0
     total_predictions = len(data)
-    
+
     for row in data:
         prediction = predict_id3(row, tree)
         actual = row[concepto]
-        
-     
+
         predicted_binary = 1 if prediction == condicion_cumplida else 0
         actual_binary = 1 if actual == condicion_cumplida else 0
-        
+
         if predicted_binary == actual_binary:
             correct_predictions += 1
-    
-    return correct_predictions / total_predictions if total_predictions > 0 else 0
 
+    return correct_predictions / total_predictions if total_predictions > 0 else 0
