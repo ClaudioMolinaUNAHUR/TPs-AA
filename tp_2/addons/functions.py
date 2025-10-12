@@ -10,13 +10,13 @@ def predict_id3(data, tree):
     # Encontrar el atributo de este nodo (la clave que no es 'metrics')
     attribute = None
     for key in tree:
-        if key != 'metrics':
+        if key != "metrics":
             attribute = key
             break  # Encontramos el atributo, salimos del bucle
 
     if attribute is None:
         # No se encontró un atributo para dividir, usar la clase mayoritaria
-        class_counts = tree['metrics']['class']
+        class_counts = tree["metrics"]["class"]
         return max(class_counts, key=class_counts.get)
 
     value_in_data = data.get(attribute)
@@ -26,7 +26,7 @@ def predict_id3(data, tree):
         return predict_id3(data, tree[attribute][value_in_data])
     else:
         # Dato no visto: no hay rama. Devolvemos la clase mayoritaria de este nodo.
-        class_counts = tree['metrics']['class']
+        class_counts = tree["metrics"]["class"]
         return max(class_counts, key=class_counts.get)
 
 
@@ -160,15 +160,15 @@ def bootstrap_train(train, attrs, forest_length, q_attrs=0, func_sqrt=True):
         use_sqrt = True
         # raiz de a | log de a
         q_attrs = math.log(len(attrs), 2) if func_sqrt else math.sqrt(len(attrs))
-        q_attrs = max(1, int(q_attrs))  
+        q_attrs = max(1, int(q_attrs))
 
     for i in range(forest_length):
         selected_attrs = []
-        
-        #Mezclar Atributos
+
+        # Mezclar Atributos
         shuffled_attrs = attrs.copy()
         random.shuffle(shuffled_attrs)
-        
+
         for attr in shuffled_attrs:
             random_value = random.random()
             if len(selected_attrs) < q_attrs or (not use_sqrt and random_value >= 0.5):

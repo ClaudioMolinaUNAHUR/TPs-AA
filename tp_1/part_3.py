@@ -12,7 +12,7 @@ from utils.helpers import (
 from tp_1.addons.functions import discrete_naive_bayes
 
 
-def part_3():
+def tp1_part_3():
     file_path = "./tp_1/Préstamo.csv"
     file_path_roc = "./tp_1/results/roc_curve.png"
     data = cargar_csv(file_path, "latin-1")
@@ -51,7 +51,7 @@ def part_3():
     tn = confusion_matrix_result["tn"]
     fp = confusion_matrix_result["fp"]
     fn = confusion_matrix_result["fn"]
-    
+
     accuracy = accuracy_score(tp, tn, fp, fn)
     recall = recall_score(tp, fn)
     precision = precision_score(tp, fp)

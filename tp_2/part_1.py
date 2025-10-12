@@ -31,11 +31,7 @@ def tp2_part_1():
     result = filter_data_prestamo(data, attrs, concepto, ages=[40, 45], between=True)
     test, train = split_test_data(result, test_size=0.20)
 
-    print("test: ", len(test))
-    print("train: ", len(train))
-    print("total: ", len(result))
-    
-    quantity, tree = discrete_id3(train, attrs, concepto)
+    _, tree = discrete_id3(train, attrs, concepto)
     save_json(file_path_tree, tree)
 
     predicted = []

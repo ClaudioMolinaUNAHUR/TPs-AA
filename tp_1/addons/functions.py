@@ -103,4 +103,3 @@ def discrete_naive_bayes(test_row, train, attrs, concepto_column, condicion_cump
 
     # print(accept, reject)
     return accept if accept > reject else abs(reject - 1)
-

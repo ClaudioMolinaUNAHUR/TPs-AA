@@ -1,4 +1,3 @@
-import numpy as np
 from utils.helpers import (
     accuracy_score,
     split_test_data,
@@ -18,7 +17,7 @@ from tp_1.addons.functions import (
 )
 
 
-def part_1_2():
+def tp1_part_1_2():
     file_path = "./tp_1/Préstamo.csv"
     data = cargar_csv(file_path, "latin-1")
 
@@ -46,7 +45,7 @@ def part_1_2():
     tn = confusion_matrix_result["tn"]
     fp = confusion_matrix_result["fp"]
     fn = confusion_matrix_result["fn"]
-    
+
     accuracy = accuracy_score(tp, tn, fp, fn)
     specificity = specificity_score(tn, fp)
     recall = recall_score(tp, fn)
