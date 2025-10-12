@@ -9,7 +9,7 @@ def train_linear_regression(X, y):
   
     X = np.array(X, dtype=float)
     y = np.array(y, dtype=float).reshape(-1, 1)
-
+    
     # Agregamos columna de 1s para el término independiente
     X_b = np.c_[np.ones((len(X), 1)), X]
 
