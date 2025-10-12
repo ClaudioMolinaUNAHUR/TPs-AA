@@ -60,20 +60,21 @@ def tp3_part_1():
     y_pred_reg = predict_linear_regression(X_test_reg, coefficient_reg)
     r2 = r2_score(y_test_reg, y_pred_reg)
     
-    
-    t = np.asarray(coefficient_reg).ravel().tolist()
-    ecuacion = {
-        "intercepto": float(t[0]),
-        attrs[0]: float(t[1]),
-        attrs[1]: float(t[2]),
-        attrs[2]: float(t[3]),
+    test_new_student = {
+      attrs[0]: 25.0,
+      attrs[1]: 0.58,
+      attrs[2]: 68.0
     }
+    test_student = []
+    for attr in attrs:
+       test_student.append(test_new_student[attr])
+    y_pred_test_student = predict_linear_regression([test_student], coefficient_reg)
 
     return {
         "split": {"train": len(train), "test": len(test), "proporcion_test": 0.20},
         "regresion_lineal": {
             "features": attrs,
-            "ecuacion": ecuacion, 
+            "ecuacion": y_pred_test_student, 
             "r2_test": r2,
         },
     }

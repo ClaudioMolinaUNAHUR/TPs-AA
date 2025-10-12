@@ -7,7 +7,18 @@ from scipy.interpolate import make_interp_spline
 
 
 def like_json(data):
-    return json.dumps(data, indent=2, ensure_ascii=False)
+    def _default(o):
+        if isinstance(o, (np.integer,)):
+            return int(o)
+        if isinstance(o, (np.floating,)):
+            return float(o)
+        if isinstance(o, (np.bool_,)):
+            return bool(o)
+        if isinstance(o, (np.ndarray,)):
+            return o.tolist()
+        return str(o)
+
+    return json.dumps(data, indent=2, ensure_ascii=False, default=_default)
 
 
 def accuracy_score(tp, tn, fp, fn):
