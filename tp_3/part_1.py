@@ -29,7 +29,7 @@ def tp3_part_1():
     prediction_column = "prediction"
 
     # 1) Split 80/20
-    # (Si tu helper acepta random_state, podés pasarlo para reproducibilidad.)
+
     test, train = split_test_data(data, test_size=0.20)
 
     # ---------------- Regresión lineal (Calificación) ----------------
@@ -42,3 +42,33 @@ def tp3_part_1():
     y_pred_reg = predict_linear_regression(X_test_reg, theta)
     y_pred_reg = np.asarray(y_pred_reg).ravel()  # asegurar forma (n,)
     r2 = r2_score(y_test_reg, y_pred_reg)
+
+
+## Regresión logística (Condición)
+    X_train_cls = [[float(r[a]) for a in attrs] for r in train]
+    y_train_cls = [1 if r[concepto_cls] == condicion_cumplida else 0 for r in train]
+    X_test_cls  = [[float(r[a]) for a in attrs] for r in test]
+    y_test_cls  = [1 if r[concepto_cls] == condicion_cumplida else 0 for r in test]
+
+    weights = train_logistic_regression(X_train_cls, y_train_cls, lr=0.001, epochs=5000)
+    preds_cls, probs_cls = predict_logistic_regression(X_test_cls, weights, threshold=0.5)
+
+    weights = train_logistic_regression(X_train_cls, y_train_cls, lr=0.001, epochs=5000)
+    preds_cls, probs_cls = predict_logistic_regression(X_test_cls, weights, threshold=0.5)
+
+
+    ####matriz
+
+    predicted_rows = []
+    for r, pred in zip(test, preds_cls):
+        row = dict(r)
+        row[prediction_column] = int(pred)
+        predicted_rows.append(row)
+
+    cm = confusion_matrix(predicted_rows, concepto_cls, prediction_column, condicion_cumplida)
+    tp, tn, fp, fn = cm["tp"], cm["tn"], cm["fp"], cm["fn"]
+
+    acc = accuracy_score(tp, tn, fp, fn)
+    rec = recall_score(tp, fn)
+    pre = precision_score(tp, fp)
+    f1 = f1_score(pre, rec)
