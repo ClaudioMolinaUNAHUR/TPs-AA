@@ -56,13 +56,12 @@ def tp3_part_1():
     print('test', X_test_reg)
     print('test', y_test_reg)
 
-    theta = train_linear_regression(X_train_reg, y_train_reg)
-    y_pred_reg = predict_linear_regression(X_test_reg, theta)
-    y_pred_reg = np.asarray(y_pred_reg).ravel()  # asegurar forma (n,)
+    coefficient_reg = train_linear_regression(X_train_reg, y_train_reg)
+    y_pred_reg = predict_linear_regression(X_test_reg, coefficient_reg)
     r2 = r2_score(y_test_reg, y_pred_reg)
     
     
-    t = np.asarray(theta).ravel().tolist()
+    t = np.asarray(coefficient_reg).ravel().tolist()
     ecuacion = {
         "intercepto": float(t[0]),
         attrs[0]: float(t[1]),

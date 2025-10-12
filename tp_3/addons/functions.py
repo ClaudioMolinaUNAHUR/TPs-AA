@@ -24,18 +24,38 @@ def train_linear_regression(X, y):
 
   
 
-def predict_linear_regression(X, theta):
-    X = np.asarray(X, dtype=float)
-    X_b = np.c_[np.ones((len(X), 1)), X]
-    y_hat = X_b @ theta
-    return y_hat
+def predict_linear_regression(X, coefficient_reg):
+   #Luego pasar el conj de entrenamiento con un for
+    predict = []
+    for row in X:
+        sum=0.0
+        for i,B in enumerate(coefficient_reg):
+            if i == 0:
+                sum += B
+            else:
+                sum += row[i-1]*B
+        predict.append(sum)
+    return (predict)
+
 
 def r2_score(y_true, y_pred):
-    y_true = np.asarray(y_true, dtype=float).ravel()
-    y_pred = np.asarray(y_pred, dtype=float).ravel()
-    ss_res = np.sum((y_true - y_pred) ** 2)
-    ss_tot = np.sum((y_true - np.mean(y_true)) ** 2)
-    return 1.0 - ss_res / ss_tot if ss_tot != 0 else 0.0
+    #Promedio y
+    sum=0.0
+    for value in y_true:
+        sum += value[0]
+    y_prom = sum/len(y_true)
+    sst = 0.0
+    for value in y_true:
+        sst += (value[0] - y_prom)**2
+    ssr=0.0
+    for value in y_pred:
+        ssr += (value[0] - y_prom)**2
+    
+    return (ssr/sst)
+
+
+
+
 
 
 
