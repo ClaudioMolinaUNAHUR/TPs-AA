@@ -1,5 +1,8 @@
 # tp_3/part_1.py
-from utils.helpers import cargar_csv, split_test_data, confusion_matrix, filter_data_estudiantes
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.helpers import cargar_csv, split_test_data, filter_data_estudiantes
 from tp_3.addons.functions import (
     train_linear_regression,
     predict_linear_regression,
