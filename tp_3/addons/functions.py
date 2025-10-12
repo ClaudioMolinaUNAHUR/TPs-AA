@@ -1,37 +1,47 @@
-# tp_3/addons/functions.py
+
 import math
 import numpy as np
 
-# ----------------------------
-#   REGRESIÓN LINEAL MÚLTIPLE
-# ----------------------------
-def train_linear_regression(X, y):
-  
-    X = np.array(X, dtype=float)
-    y = np.array(y, dtype=float).reshape(-1, 1)
-    
-    # Agregamos columna de 1s para el término independiente
-    X_b = np.c_[np.ones((len(X), 1)), X]
 
-    # Ecuación normal: (XᵀX)⁻¹Xᵀy
-    theta = np.linalg.pinv(X_b.T @ X_b) @ X_b.T @ y
-    return theta  # incluye intercepto en la primera posición
+def train_linear_regression(X, y):
+
+  X_b = np.c_[np.ones((len(X), 1)), X]
+
+  #Se obtiene traspuesta de X
+  X_t = np.transpose(X_b)
+  #producto de (X'X)
+  X_t_X = np.dot(X_t,X_b)
+   #Se calcula  inversa de (X'X)
+  X_t_X_inversa = np.linalg.inv(X_t_X)
+  #Formula previa (X'X)^-1X'
+  X_t_X_i_multiplicado_X_t = np.dot(X_t_X_inversa,X_t)
+  #Coeficiente de regresion (X'X)^-1X'y
+  coefficient_reg = np.dot(X_t_X_i_multiplicado_X_t,y)
+  return ( 
+    coefficient_reg
+    )
+
+
+  
 
 def predict_linear_regression(X, theta):
-    X = np.array(X, dtype=float)
+    X = np.asarray(X, dtype=float)
     X_b = np.c_[np.ones((len(X), 1)), X]
-    return X_b @ theta
+    y_hat = X_b @ theta
+    return y_hat
 
 def r2_score(y_true, y_pred):
-    y_true = np.array(y_true, dtype=float)
-    y_pred = np.array(y_pred, dtype=float)
+    y_true = np.asarray(y_true, dtype=float).ravel()
+    y_pred = np.asarray(y_pred, dtype=float).ravel()
     ss_res = np.sum((y_true - y_pred) ** 2)
     ss_tot = np.sum((y_true - np.mean(y_true)) ** 2)
-    return 1 - ss_res / ss_tot
+    return 1.0 - ss_res / ss_tot if ss_tot != 0 else 0.0
+
+
 
 
 # ----------------------------
-#   REGRESIÓN LOGÍSTICA
+#  TODO:  REGRESIÓN LOGÍSTICA
 # ----------------------------
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))

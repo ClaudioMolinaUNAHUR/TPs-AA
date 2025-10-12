@@ -232,7 +232,7 @@ def filter_data_estudiantes(data, attrs, respuesta):
             result.append(
                 {
                     **personal_data,
-                    respuesta: row[respuesta],
+                    respuesta: float(row[respuesta]),
                 }
             )
     return result

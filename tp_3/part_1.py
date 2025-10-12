@@ -2,13 +2,22 @@
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.helpers import cargar_csv, split_test_data, filter_data_estudiantes
+from utils.helpers import (
+    cargar_csv,
+    split_test_data,
+    filter_data_estudiantes,
+    confusion_matrix,
+    accuracy_score,
+    recall_score,
+    precision_score,
+    f1_score,
+)
 from tp_3.addons.functions import (
     train_linear_regression,
     predict_linear_regression,
     r2_score,
     train_logistic_regression,
-    predict_logistic_regression
+    predict_logistic_regression,
 )
 import numpy as np
 
@@ -31,22 +40,46 @@ def tp3_part_1():
     y_test_reg  = []
     
     for row in test:
-        for attr in attrs:
-            X_test_reg.append(row[attr])
-        y_test_reg.append(row[respuesta])
+       row_predictoria = [row[a] for a in attrs]
+       X_test_reg.append(row_predictoria)
+       y_test_reg.append([row[respuesta]])
         
     X_train_reg = []
     y_train_reg = []
     
     for row in train:
-        for attr in attrs:
-            X_train_reg.append(row[attr])
-        y_train_reg.append(row[respuesta])
+        row_predictoria = [row[a] for a in attrs]
+        X_train_reg.append(row_predictoria)
+        y_train_reg.append([row[respuesta]])
+
+        
+    print('test', X_test_reg)
+    print('test', y_test_reg)
 
     theta = train_linear_regression(X_train_reg, y_train_reg)
     y_pred_reg = predict_linear_regression(X_test_reg, theta)
     y_pred_reg = np.asarray(y_pred_reg).ravel()  # asegurar forma (n,)
     r2 = r2_score(y_test_reg, y_pred_reg)
+    
+    
+    t = np.asarray(theta).ravel().tolist()
+    ecuacion = {
+        "intercepto": float(t[0]),
+        attrs[0]: float(t[1]),
+        attrs[1]: float(t[2]),
+        attrs[2]: float(t[3]),
+    }
+
+    return {
+        "split": {"train": len(train), "test": len(test), "proporcion_test": 0.20},
+        "regresion_lineal": {
+            "features": attrs,
+            "ecuacion": ecuacion, 
+            "r2_test": r2,
+        },
+    }
+
+
 
 
 # ## Regresión logística (Condición)
