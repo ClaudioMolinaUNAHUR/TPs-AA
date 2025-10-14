@@ -234,20 +234,20 @@ def filter_data_prestamo(data, attrs, concepto, ages, between=False):
             )
     return result
 
+
 def filter_data_estudiantes(data, attrs, respuesta):
     result = []
     for row in data:
-            personal_data = {}
-            for attr in attrs:
-                personal_data[attr] = float(row[attr])
-            result.append(
-                {
-                    **personal_data,
-                    respuesta: float(row[respuesta]),
-                }
-            )
+        personal_data = {}
+        for attr in attrs:
+            personal_data[attr] = float(row[attr])
+        result.append(
+            {
+                **personal_data,
+                respuesta: float(row[respuesta]),
+            }
+        )
     return result
-
 
 
 def plot_precision_vs_tree_size(node_counts, train_accuracies, test_accuracies, path):
