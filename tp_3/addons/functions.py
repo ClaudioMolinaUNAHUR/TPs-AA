@@ -67,7 +67,7 @@ def logistical_regresion(train, attrs, respuesta):
     logreg.fit(X_train, y_train)
     return logreg
 
-def logistical_regresion_predict(log_reg, test, attrs, respuesta):
+def logistical_regresion_predict(log_reg, test, attrs):
     df_test = pd.DataFrame(test)
     x_test_df = df_test[attrs]
     y_pred_df = log_reg.predict(x_test_df)

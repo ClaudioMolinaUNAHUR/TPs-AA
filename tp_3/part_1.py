@@ -57,8 +57,6 @@ def tp3_part_1():
         X_train_reg.append(row_predictoria)
         y_train_reg.append([row[respuesta]])
 
-    print("test", X_test_reg)
-    print("test", y_test_reg)
     ## se usa "y" para regresion multiple, con valores continuos
     coefficient_reg = train_linear_regression_multiple(X_train_reg, y_train_reg)
     y_pred_reg = predict_linear_regression(X_test_reg, coefficient_reg)
@@ -80,7 +78,7 @@ def tp3_part_1():
     LogRegression = logistical_regresion(train_log_reg, attrs, respuesta_log_reg)
 
     y_pred_df = logistical_regresion_predict(
-        LogRegression, test_log_reg, attrs, respuesta_log_reg
+        LogRegression, test_log_reg, attrs
     )
     
     predicted = []
@@ -114,7 +112,7 @@ def tp3_part_1():
         [test_student], coefficient_reg
     )
     y_pred_test_student_logistic = logistical_regresion_predict(
-        LogRegression, [test_student], attrs, respuesta_log_reg
+        LogRegression, [test_new_student], attrs
     )
 
     return {
