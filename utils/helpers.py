@@ -235,7 +235,7 @@ def filter_data_prestamo(data, attrs, concepto, ages, between=False):
     return result
 
 
-def filter_data_estudiantes(data, attrs, respuesta):
+def filter_data_estudiantes(data, attrs, respuesta, classification=False):
     result = []
     for row in data:
         personal_data = {}
@@ -244,7 +244,7 @@ def filter_data_estudiantes(data, attrs, respuesta):
         result.append(
             {
                 **personal_data,
-                respuesta: float(row[respuesta]),
+                respuesta: row[respuesta] if classification else float(row[respuesta]),
             }
         )
     return result

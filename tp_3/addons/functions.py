@@ -1,5 +1,7 @@
 import math
 import numpy as np
+from sklearn.linear_model import LogisticRegression
+import pandas as pd
 
 
 def train_linear_regression_multiple(X, y):
@@ -49,39 +51,26 @@ def r2_score(y_true, y_pred):
     return ssr / sst
 
 
-# ----------------------------
-#  TODO:  REGRESIÓN LOGÍSTICA
-# ----------------------------
-def sigmoid(z):
-    return 1 / (1 + np.exp(-z))
 
+def logistical_regresion(train, attrs, respuesta):
+    #conversion a pandas DataFrame para usar sklearn
+    pd_train = pd.DataFrame(train)
+    
+    # se separa X e y
+    X_train = pd_train[attrs]
+    y_train = pd_train[respuesta]
+    
+    # se instacia el modelo
+    logreg = LogisticRegression(random_state=16)
+    
+    # se entrena el modelo
+    logreg.fit(X_train, y_train)
+    return logreg
 
-def train_logistic_regression(X, y, lr=0.001, epochs=10000):
-
-    X = np.array(X, dtype=float)
-    y = np.array(y, dtype=float).reshape(-1, 1)
-
-    n, m = X.shape
-    X_b = np.c_[np.ones((n, 1)), X]
-    weights = np.zeros((m + 1, 1))
-
-    for _ in range(epochs):
-        z = X_b @ weights
-        h = sigmoid(z)
-        gradient = (X_b.T @ (h - y)) / n
-        weights -= lr * gradient
-
-    return weights
-
-
-def predict_logistic_regression(X, weights, threshold=0.5):
-    X = np.array(X, dtype=float)
-    X_b = np.c_[np.ones((len(X), 1)), X]
-    proba = sigmoid(X_b @ weights)
-    preds = (proba >= threshold).astype(int)
-    return preds, proba
-
-
-# ----------------------------
-#   MÉTRICAS
-# ----------------------------
+def logistical_regresion_predict(log_reg, test, attrs, respuesta):
+    df_test = pd.DataFrame(test)
+    x_test_df = df_test[attrs]
+    y_test_df = df_test[respuesta]
+    y_pred_df = log_reg.predict(x_test_df)
+    return y_pred_df, y_test_df
+    
