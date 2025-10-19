@@ -22,7 +22,6 @@ from tp_3.addons.functions import (
     logistical_regresion,
     logistical_regresion_predict,
 )
-import numpy as np
 
 
 def tp3_part_1():
@@ -63,6 +62,7 @@ def tp3_part_1():
     ## se usa "y" para regresion multiple, con valores continuos
     coefficient_reg = train_linear_regression_multiple(X_train_reg, y_train_reg)
     y_pred_reg = predict_linear_regression(X_test_reg, coefficient_reg)
+    
     #------- REGRESION LINEAL METRICAS-------#
     r2 = r2_score(y_test_reg, y_pred_reg)
 
@@ -87,8 +87,8 @@ def tp3_part_1():
     for i, row in enumerate(test_log_reg):
         row[prediction_column] = 1 if condicion_cumplida == y_pred_df[i] else 0
         predicted.append(row)
+        
     #------- REGRESION LOGISTICA METRICAS-------#
-
     confusion_matrix_result = confusion_matrix(
         predicted, respuesta_log_reg, prediction_column, condicion_cumplida
     )

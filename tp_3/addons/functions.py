@@ -70,7 +70,6 @@ def logistical_regresion(train, attrs, respuesta):
 def logistical_regresion_predict(log_reg, test, attrs, respuesta):
     df_test = pd.DataFrame(test)
     x_test_df = df_test[attrs]
-    y_test_df = df_test[respuesta]
     y_pred_df = log_reg.predict(x_test_df)
     return y_pred_df
     
