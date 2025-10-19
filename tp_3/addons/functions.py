@@ -72,5 +72,5 @@ def logistical_regresion_predict(log_reg, test, attrs, respuesta):
     x_test_df = df_test[attrs]
     y_test_df = df_test[respuesta]
     y_pred_df = log_reg.predict(x_test_df)
-    return y_pred_df, y_test_df
+    return y_pred_df
     

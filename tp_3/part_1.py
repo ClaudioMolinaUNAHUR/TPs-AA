@@ -13,6 +13,7 @@ from utils.helpers import (
     recall_score,
     precision_score,
     f1_score,
+    confusion_matrix,
 )
 from tp_3.addons.functions import (
     train_linear_regression_multiple,
@@ -33,9 +34,11 @@ def tp3_part_1():
         "Calificaciones previas",
         "Porcentaje de asistencia",
     ]
-    respuesta = "Calificación"
-    respuesta_log_reg = "Condición"
 
+    #------- REGRESION LINEAL-------#
+    respuesta = "Calificación"
+    
+    
     result = filter_data_estudiantes(data, attrs, respuesta)
     test, train = split_test_data(result, test_size=0.20)
 
@@ -57,12 +60,18 @@ def tp3_part_1():
 
     print("test", X_test_reg)
     print("test", y_test_reg)
-
     ## se usa "y" para regresion multiple, con valores continuos
     coefficient_reg = train_linear_regression_multiple(X_train_reg, y_train_reg)
     y_pred_reg = predict_linear_regression(X_test_reg, coefficient_reg)
+    #------- REGRESION LINEAL METRICAS-------#
     r2 = r2_score(y_test_reg, y_pred_reg)
 
+
+    #------- REGRESION LOGISTICA -------#
+    respuesta_log_reg = "Condición"
+    condicion_cumplida = "Aprobado"
+    prediction_column = "prediction"
+    
     ## se usa "y" para regresion logistica, con valores categoricos
     result_log_reg = filter_data_estudiantes(
         data, attrs, respuesta_log_reg, classification=True
@@ -70,30 +79,43 @@ def tp3_part_1():
     test_log_reg, train_log_reg = split_test_data(result_log_reg, test_size=0.20)
     LogRegression = logistical_regresion(train_log_reg, attrs, respuesta_log_reg)
 
-    y_pred_df, y_test_df = logistical_regresion_predict(
+    y_pred_df = logistical_regresion_predict(
         LogRegression, test_log_reg, attrs, respuesta_log_reg
     )
+    
+    predicted = []
+    for i, row in enumerate(test_log_reg):
+        row[prediction_column] = 1 if condicion_cumplida == y_pred_df[i] else 0
+        predicted.append(row)
+    #------- REGRESION LOGISTICA METRICAS-------#
 
-    confusion_matrix_result = metrics.confusion_matrix(y_test_df, y_pred_df)
+    confusion_matrix_result = confusion_matrix(
+        predicted, respuesta_log_reg, prediction_column, condicion_cumplida
+    )
 
-    tp = confusion_matrix_result[0][0]
-    tn = confusion_matrix_result[1][1]
-    fp = confusion_matrix_result[0][1]
-    fn = confusion_matrix_result[1][0]
+    tp = confusion_matrix_result["tp"]
+    tn = confusion_matrix_result["tn"]
+    fp = confusion_matrix_result["fp"]
+    fn = confusion_matrix_result["fn"]
 
     accuracy = accuracy_score(tp, tn, fp, fn)
     recall = recall_score(tp, fn)
     precision = precision_score(tp, fp)
     f1 = f1_score(precision, recall)
 
+    #------- Nuevo estudiante a predecir -------
     test_new_student = {attrs[0]: 25.0, attrs[1]: 0.58, attrs[2]: 68.0}
     test_student = []
     for attr in attrs:
         test_student.append(test_new_student[attr])
+        
+    
     y_pred_test_student_linear = predict_linear_regression(
         [test_student], coefficient_reg
     )
-    y_pred_test_student_logistic = LogRegression.predict([test_student])
+    y_pred_test_student_logistic = logistical_regresion_predict(
+        LogRegression, [test_student], attrs, respuesta_log_reg
+    )
 
     return {
         "split": {"train": len(train), "test": len(test), "proporcion_test": 0.20},
