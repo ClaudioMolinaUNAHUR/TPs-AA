@@ -1,7 +1,11 @@
 import math
 import numpy as np
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 import pandas as pd
+import random
+from sklearn.model_selection import KFold
+from sklearn.metrics import accuracy_score
 
 
 def train_linear_regression_multiple(X, y):
@@ -22,7 +26,7 @@ def train_linear_regression_multiple(X, y):
 
 
 def predict_linear_regression(X, coefficient_reg):
-    # Luego pasar el conj de entrenamiento con un for
+    # Luego pasar el conj de test con un for
     predict = []
     for row in X:
         sum = 0.0
@@ -51,25 +55,85 @@ def r2_score(y_true, y_pred):
     return ssr / sst
 
 
-
 def logistical_regresion(train, attrs, respuesta):
-    #conversion a pandas DataFrame para usar sklearn
+    # conversion a pandas DataFrame para usar sklearn
     pd_train = pd.DataFrame(train)
-    
+
     # se separa X e y
     X_train = pd_train[attrs]
     y_train = pd_train[respuesta]
-    
+
     # se instacia el modelo
     logreg = LogisticRegression(random_state=16)
-    
+
     # se entrena el modelo
     logreg.fit(X_train, y_train)
     return logreg
+
 
 def logistical_regresion_predict(log_reg, test, attrs):
     df_test = pd.DataFrame(test)
     x_test_df = df_test[attrs]
     y_pred_df = log_reg.predict(x_test_df)
     return y_pred_df
-    
+
+
+def search_svm(
+    train,
+    test,
+    attrs,
+    respuesta,
+    kernel,
+    C_values,
+    r_values,
+    gamma_values,
+    prediction_column,
+    condicion_cumplida,
+):
+
+    shuffled_train = train.copy()
+    random.shuffle(shuffled_train)
+
+    pd_train = pd.DataFrame(shuffled_train)
+    pd_test = pd.DataFrame(test)
+
+    # se separa X e y
+    X_train = pd_train[attrs]
+    y_train = pd_train[respuesta]
+
+    hiperparameters = gamma_values
+    if kernel == "poly":
+        hiperparameters = r_values
+
+    results = []
+    for C in C_values:
+        for hiperparameter in hiperparameters:
+            config = {
+                "C": C,
+                "kernel": kernel,
+            }
+            if kernel not in ["linear", "poly"]:
+                config = {
+                    **config,
+                    "gamma": hiperparameter,
+                }
+                
+            if kernel == "poly":
+                config = {
+                    **config,
+                    "degree": 3,
+                    "coef0": hiperparameter, # valor r
+                }
+            
+
+            svm = SVC(**config)
+            svm.fit(X_train, y_train)
+            y_pred = svm.predict(pd_test[attrs])
+
+            predicted = []
+            test_copy = test.copy()
+            for i, row in enumerate(test_copy):
+                row[prediction_column] = 1 if condicion_cumplida == y_pred[i] else 0
+                predicted.append(row)
+            results.append({**config, "svm": svm, "predicted": predicted})
+    return results

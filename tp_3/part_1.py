@@ -103,11 +103,10 @@ def tp3_part_1():
 
     #------- Nuevo estudiante a predecir -------
     test_new_student = {attrs[0]: 25.0, attrs[1]: 0.58, attrs[2]: 68.0}
+    
     test_student = []
     for attr in attrs:
         test_student.append(test_new_student[attr])
-        
-    
     y_pred_test_student_linear = predict_linear_regression(
         [test_student], coefficient_reg
     )
