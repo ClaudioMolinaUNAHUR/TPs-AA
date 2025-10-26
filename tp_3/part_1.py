@@ -119,13 +119,13 @@ def tp3_part_1():
         "attrs": attrs,
         "respuesta": respuesta,
         "regresion_lineal": {
-            "ecuacion": y_pred_test_student_linear,
+            "student_pred": y_pred_test_student_linear,
             "coefficient_reg": coefficient_reg,
             "r2_test": r2,
         },
         "respuesta_log_reg": respuesta_log_reg,
         "regresion_logistica": {
-            "ecuacion": y_pred_test_student_logistic[0],
+            "student_pred": y_pred_test_student_logistic[0],
             "coefficient_reg": LogRegression.coef_,
             "B0": LogRegression.intercept_,
             "accuracy": accuracy,

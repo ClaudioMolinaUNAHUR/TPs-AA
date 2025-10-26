@@ -1,8 +1,5 @@
-# tp_3/part_1.py
 import sys
 import os
-
-from sklearn import metrics
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.helpers import (
@@ -32,15 +29,15 @@ def tp3_part_2():
     prediction_column = "prediction"
 
     ## se usa "y" para regresion logistica, con valores categoricos
-    result = filter_data_estudiantes(data, attrs, respuesta, classification=True)
-    test, train = split_test_data(result, test_size=0.20)
+    result_svm = filter_data_estudiantes(data, attrs, respuesta, classification=True)
+    test, train = split_test_data(result_svm, test_size=0.20)
 
     C_values = [0.01, 0.1, 1, 10, 100]
     gamma_values = [10, 1, 0.1, 0.01]
     r_values = [-1.0, -0.5, 0.0, 0.5, 1.0]
     kernels = ["rbf", "linear", "sigmoid", "poly"]
 
-    results_kernel_score = []
+    best_SVMs_searched = []
 
     for kernel_type in kernels:
         results = search_svm(
@@ -69,7 +66,7 @@ def tp3_part_2():
             recall = recall_score(tp, fn)
             precision = precision_score(tp, fp)
             f1 = f1_score(precision, recall)
-            
+
             predicted.pop("predicted")
             svm_score.append(
                 {
@@ -80,27 +77,24 @@ def tp3_part_2():
                 }
             )
         best_result = max(svm_score, key=lambda x: x["accuracy"])
-        results_kernel_score.append({"kernel": kernel_type, "best_result": best_result})
+        best_SVMs_searched.append({"kernel": kernel_type, "best_result": best_result})
 
-    print(results_kernel_score)
+    # ------- Nuevo estudiante a predecir -------
+    test_new_student = {attrs[0]: 25.0, attrs[1]: 0.58, attrs[2]: 68.0}
 
-    # #------- Nuevo estudiante a predecir -------
-    # test_new_student = {attrs[0]: 25.0, attrs[1]: 0.58, attrs[2]: 68.0}
+    pred_student_svm = []
+    for svm_searched in best_SVMs_searched:
+        result_svm = svm_searched["best_result"]
+        instance_svm = result_svm.pop("svm")
 
-    # test_student = []
-    # y_pred_test_student_logistic = logistical_regresion_predict(
-    #     LogRegression, [test_new_student], attrs
-    # )
+        student_features = [test_new_student[attr] for attr in attrs]
 
-    # return {
-    #     "split": {"train": len(train), "test": len(test), "proporcion_test": 0.20},
-    #     "respuesta_log_reg": respuesta,
-    #     "regresion_logistica": {
-    #         "ecuacion": y_pred_test_student_logistic[0],
-    #         "coefficient_reg": LogRegression.coef_,
-    #         "B0": LogRegression.intercept_,
-    #         "accuracy": accuracy,
-    #         "confusion_matrix": {"tp": tp, "tn": tn, "fp": fp, "fn": fn},
-    #         "f1": f1,
-    #     },
-    # }
+        y_pred = instance_svm.predict([student_features])
+        pred_student_svm.append(
+            {"kernel": svm_searched["kernel"], "student_pred": y_pred[0], **result_svm}
+        )
+
+    return {
+        "split": {"train": len(train), "test": len(test), "proporcion_test": 0.20},
+        "results": pred_student_svm,
+    }
