@@ -31,8 +31,8 @@ def tp3_part_2():
     result_svm = filter_data_estudiantes(data, attrs, respuesta, classification=True)
     test, train = split_test_data(result_svm, test_size=0.20)
 
-    C_values = [0.01, 0.1, 1, 10, 100, 1000]
-    gamma_values = [0.0001, 0.001, 0.01, 0.1, 1, 10]
+    C_values = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
+    gamma_values = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10]
     r_values = [-1.0, -0.5, 0.0, 0.5, 1.0]
     kernels = ["linear", "rbf", "poly", "sigmoid"]
 
@@ -86,7 +86,7 @@ def tp3_part_2():
     pred_student_svm = []
     for svm_searched in best_SVMs_searched:
         result_svm = svm_searched["best_result"]
-        instance_svm = result_svm.pop("svm")
+        instance_svm = result_svm.pop("instance_svm")
 
         student_features = [test_new_student[attr] for attr in attrs]
 

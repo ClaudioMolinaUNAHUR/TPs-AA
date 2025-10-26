@@ -126,5 +126,5 @@ def search_svm(
             for i, row in enumerate(test_copy):
                 row[prediction_column] = 1 if condicion_cumplida == y_pred[i] else 0
                 predicted.append(row)
-            results.append({**config, "svm": svm, "predicted": predicted})
+            results.append({**config, "instance_svm": svm, "predicted": predicted})
     return results
