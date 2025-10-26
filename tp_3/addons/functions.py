@@ -108,23 +108,14 @@ def search_svm(
     results = []
     for C in C_values:
         for hiperparameter in hiperparameters:
-            config = {
-                "C": C,
-                "kernel": kernel,
-            }
-            if kernel not in ["linear", "poly"]:
-                config = {
-                    **config,
-                    "gamma": hiperparameter,
-                }
-                
-            if kernel == "poly":
-                config = {
-                    **config,
-                    "degree": 3,
-                    "coef0": hiperparameter, # valor r
-                }
-            
+
+            config = {"C": C, "kernel": kernel}
+
+            if kernel in ["rbf", "sigmoid"]:
+                config["gamma"] = hiperparameter
+            elif kernel == "poly":
+                config["degree"] = 3
+                config["coef0"] = hiperparameter  # valor r
 
             svm = SVC(**config)
             svm.fit(X_train, y_train)

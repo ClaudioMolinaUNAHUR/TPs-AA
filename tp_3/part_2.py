@@ -28,14 +28,13 @@ def tp3_part_2():
     condicion_cumplida = "Aprobado"
     prediction_column = "prediction"
 
-    ## se usa "y" para regresion logistica, con valores categoricos
     result_svm = filter_data_estudiantes(data, attrs, respuesta, classification=True)
     test, train = split_test_data(result_svm, test_size=0.20)
 
-    C_values = [0.01, 0.1, 1, 10, 100]
-    gamma_values = [10, 1, 0.1, 0.01]
+    C_values = [0.01, 0.1, 1, 10, 100, 1000]
+    gamma_values = [0.0001, 0.001, 0.01, 0.1, 1, 10]
     r_values = [-1.0, -0.5, 0.0, 0.5, 1.0]
-    kernels = ["rbf", "linear", "sigmoid", "poly"]
+    kernels = ["linear", "rbf", "poly", "sigmoid"]
 
     best_SVMs_searched = []
 
@@ -53,9 +52,12 @@ def tp3_part_2():
             condicion_cumplida=condicion_cumplida,
         )
         svm_score = []
-        for predicted in results:
+        for result in results:
+
+            predicted = result.pop("predicted")
+
             confusion_matrix_result = confusion_matrix(
-                predicted["predicted"], respuesta, prediction_column, condicion_cumplida
+                predicted, respuesta, prediction_column, condicion_cumplida
             )
             tp = confusion_matrix_result["tp"]
             tn = confusion_matrix_result["tn"]
@@ -67,10 +69,9 @@ def tp3_part_2():
             precision = precision_score(tp, fp)
             f1 = f1_score(precision, recall)
 
-            predicted.pop("predicted")
             svm_score.append(
                 {
-                    **predicted,
+                    **result,
                     "accuracy": accuracy,
                     "confusion_matrix": {"tp": tp, "tn": tn, "fp": fp, "fn": fn},
                     "f1": f1,
