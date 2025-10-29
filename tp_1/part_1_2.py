@@ -37,7 +37,7 @@ def tp1_part_1_2():
     hipotesis = get_hipotesis_find_s(train, attrs, concepto, condicion_cumplida)
 
     predicted = predict_find_s(test, hipotesis, attrs, prediction_column)
-    confusion_matrix_result = confusion_matrix(
+    confusion_matrix_result, matrix, str_matrix = confusion_matrix(
         predicted, concepto, prediction_column, condicion_cumplida
     )
 
@@ -63,7 +63,7 @@ def tp1_part_1_2():
         "f1": f1,
         "TPR": TPR,
         "FPR": FPR,
-        "confusion_matrix": confusion_matrix_result,
+        "confusion_matrix": str_matrix,
     }
 
 

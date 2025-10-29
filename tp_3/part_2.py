@@ -56,7 +56,7 @@ def tp3_part_2():
 
             predicted = result.pop("predicted")
 
-            confusion_matrix_result = confusion_matrix(
+            confusion_matrix_result, matrix, str_matrix = confusion_matrix(
                 predicted, respuesta, prediction_column, condicion_cumplida
             )
             tp = confusion_matrix_result["tp"]
@@ -73,7 +73,8 @@ def tp3_part_2():
                 {
                     **result,
                     "accuracy": accuracy,
-                    "confusion_matrix": {"tp": tp, "tn": tn, "fp": fp, "fn": fn},
+                    "confusion_obj": {"tp": tp, "tn": tn, "fp": fp, "fn": fn},
+                    "confusion_matrix": str_matrix,
                     "f1": f1,
                 }
             )

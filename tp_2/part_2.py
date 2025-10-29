@@ -38,7 +38,7 @@ def tp2_part_2():
     result = filter_data_prestamo(data, attrs, concepto, ages=[40, 45], between=True)
     test, train = split_test_data(result, test_size=0.20)
 
-    bootstraps = bootstrap_train(train, attrs, forest_length, q_attrs=0)
+    bootstraps = bootstrap_train(train, attrs, forest_length, q_attrs=4)
 
     node_counts = []
     train_accuracies = []
@@ -66,7 +66,7 @@ def tp2_part_2():
         test, random_forest, condicion_cumplida, prediction_column
     )
 
-    confusion_matrix_result = confusion_matrix(
+    confusion_matrix_result, matrix, str_matrix = confusion_matrix(
         test, concepto, prediction_column, condicion_cumplida
     )
 
@@ -86,5 +86,5 @@ def tp2_part_2():
     return {
         "accuracy": accuracy,
         "f1": f1,
-        "confusion_matrix": confusion_matrix_result,
+        "confusion_matrix": str_matrix,
     }

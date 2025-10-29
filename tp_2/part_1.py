@@ -40,7 +40,7 @@ def tp2_part_1():
         row[prediction_column] = 1 if condicion_cumplida == clase else 0
         predicted.append(row)
 
-    confusion_matrix_result = confusion_matrix(
+    confusion_matrix_result, matrix, str_matrix = confusion_matrix(
         predicted, concepto, prediction_column, condicion_cumplida
     )
 
@@ -56,5 +56,5 @@ def tp2_part_1():
     return {
         "accuracy": accuracy,
         "f1": f1,
-        "confusion_matrix": confusion_matrix_result,
+        "confusion_matrix": str_matrix,
     }

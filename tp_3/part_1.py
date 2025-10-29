@@ -87,7 +87,7 @@ def tp3_part_1():
         predicted.append(row)
         
     #------- REGRESION LOGISTICA METRICAS-------#
-    confusion_matrix_result = confusion_matrix(
+    confusion_matrix_result, matrix, str_matrix = confusion_matrix(
         predicted, respuesta_log_reg, prediction_column, condicion_cumplida
     )
 
@@ -113,7 +113,7 @@ def tp3_part_1():
     y_pred_test_student_logistic = logistical_regresion_predict(
         LogRegression, [test_new_student], attrs
     )
-
+    
     return {
         "split": {"train": len(train), "test": len(test), "proporcion_test": 0.20},
         "attrs": attrs,
@@ -129,6 +129,7 @@ def tp3_part_1():
             "coefficient_reg": LogRegression.coef_,
             "B0": LogRegression.intercept_,
             "accuracy": accuracy,
+            "matrix": str_matrix,
             "confusion_matrix": {"tp": tp, "tn": tn, "fp": fp, "fn": fn},
             "f1": f1,
         },

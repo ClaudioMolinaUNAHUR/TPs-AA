@@ -211,7 +211,16 @@ def confusion_matrix(data, concepto, prediction_column, condicion_cumplida):
                 fp += 1
             else:
                 tn += 1
-    return {"tp": tp, "tn": tn, "fp": fp, "fn": fn}
+    matrix = []
+    matrix.append([tn, fp])
+    matrix.append([fn, tp])
+    #          PREDICCIÓN
+    #         | No | Si |
+    # REAL No | TN | FP |
+    #      Si | FN | TP |
+    str_matrix = [str([tn, fp])] + [str([fn, tp])]
+
+    return {"tp": tp, "tn": tn, "fp": fp, "fn": fn}, matrix, str_matrix
 
 
 def filter_data_prestamo(data, attrs, concepto, ages, between=False):
