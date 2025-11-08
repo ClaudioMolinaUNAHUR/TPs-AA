@@ -135,11 +135,11 @@ def roc_curve(data, key_class, condicion_cumplida, path_to_save):
     return np.trapezoid(TPR_array, FPR_array)
 
 
-def cargar_csv(file_path, encoding="utf-8"):
+def cargar_csv(file_path, encoding="utf-8", delimiter=","):
     try:
         data = []
         with open(file_path, "r", encoding=encoding) as file:
-            csv_reader = csv.DictReader(file)
+            csv_reader = csv.DictReader(file, delimiter=delimiter)
             data = [row for row in csv_reader]
         return data
     except Exception as e:
@@ -256,6 +256,30 @@ def filter_data_estudiantes(data, attrs, respuesta, classification=False):
                 respuesta: row[respuesta] if classification else float(row[respuesta]),
             }
         )
+    return result
+
+
+def filter_data_wines(data, attrs, respuesta):
+    result = []
+    for row in data:
+        if row[respuesta] != "6":
+            personal_data = {}
+            for attr in attrs:
+                personal_data[attr] = float(row[attr])
+            quality = ""
+            response = float(row[respuesta])
+            if response < 5.0:
+                quality = "REGULAR"
+            if response > 5.0:
+                quality = "EXCELENTE"
+            if response == 5.0:
+                quality = "BUENO"
+            result.append(
+                {
+                    **personal_data,
+                    respuesta: quality,
+                }
+            )
     return result
 
 

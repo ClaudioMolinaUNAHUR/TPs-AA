@@ -1,130 +1,117 @@
 import math
 import numpy as np
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-import pandas as pd
-import random
-from sklearn.model_selection import KFold
-from sklearn.metrics import accuracy_score
 
+def euclidean_distance(point1, point2):
+    result = 0
+    for i in range(len(point1)):
+        point1[i] -= point2[i]
+        point1[i] = point1[i] ** 2
+        result += point1[i]
+    return math.sqrt(result)
 
-def train_linear_regression_multiple(X, y):
+def manhattan_distance(point1, point2):
+    result = 0
+    for i in range(len(point1)):
+        point1[i] -= point2[i]
+        point1[i] = abs(point1[i])
+        result += point1[i]
+    return result
 
-    X_b = np.c_[np.ones((len(X), 1)), X]
+def standarize_data(data, attrs):
+    media = {}
+    desvio = {}
+    lenght = float(len(data))
+    data_standarized = []
+    
+    for attr in attrs:
+        suma = 0
+        for row in data:
+            suma += row[attr]
+        media[attr] = suma / lenght
+        
+        for row in data:
+            suma += (row[attr] - media[attr]) ** 2
+        desvio[attr] = math.sqrt(suma / (lenght - 1.0))
+    
+    for row in data:
+        new_row = row.copy()
+        for attr in attrs:
+            new_row[attr] = (row[attr] - media[attr]) / desvio[attr]
+        data_standarized.append(new_row)
+        
+    return data_standarized
 
-    # Se obtiene traspuesta de X
-    X_t = np.transpose(X_b)
-    # producto de (X'X)
-    X_t_X = np.dot(X_t, X_b)
-    # Se calcula  inversa de (X'X)
-    X_t_X_inversa = np.linalg.inv(X_t_X)
-    # Formula previa (X'X)^-1X'
-    X_t_X_i_multiplicado_X_t = np.dot(X_t_X_inversa, X_t)
-    # Coeficiente de regresion (X'X)^-1X'y
-    coefficient_reg = np.dot(X_t_X_i_multiplicado_X_t, y)
-    return coefficient_reg
+def prediction_knn(train, attrs, row_test, Ks, respuesta, distance_metric="euclidean"):
+    distances = []
+                
+    for row_train in train:
+        values_train = []
+        values_test = []
+        for attr in attrs:
+            values_train.append(row_train[attr])
+            values_test.append(row_test[attr])
+            
+        if distance_metric == "euclidean":
+            distance = euclidean_distance(values_train, values_test)
+        else:
+            distance = manhattan_distance(values_train, values_test)
+            
+        distances.append((distance, row_train[respuesta]))
+    
+    # ordenar de menor a mayor distancia
+    distances.sort(key=lambda x: x[0])
+    
+    predictions = {}
+    for K in Ks:
+        top_k = distances[:K]
+        votes = {}
+        for _, label in top_k:
+            if label not in votes:
+                votes[label] = 0
+            votes[label] += 1
+        # obtener la clase con mas votos
+        mayor_voto = -1
+        class_prediction = None
+        
+        for label, count in votes.items():
+            if count > mayor_voto:
+                mayor_voto = count
+                class_prediction = label
+        predictions[K] = class_prediction
+    
+    return predictions
 
-
-def predict_linear_regression(X, coefficient_reg):
-    # Luego pasar el conj de test con un for
-    predict = []
-    for row in X:
-        sum = 0.0
-        for i, B in enumerate(coefficient_reg):
-            if i == 0:
-                sum += B
-            else:
-                sum += row[i - 1] * B
-        predict.append(sum)
-    return predict
-
-
-def r2_score(y_true, y_pred):
-    # Promedio y
-    sum = 0.0
-    for value in y_true:
-        sum += value[0]
-    y_prom = sum / len(y_true)
-    sst = 0.0
-    for value in y_true:
-        sst += (value[0] - y_prom) ** 2
-    ssr = 0.0
-    for value in y_pred:
-        ssr += (value[0] - y_prom) ** 2
-
-    return ssr / sst
-
-
-def logistical_regresion(train, attrs, respuesta):
-    # conversion a pandas DataFrame para usar sklearn
-    pd_train = pd.DataFrame(train)
-
-    # se separa X e y
-    X_train = pd_train[attrs]
-    y_train = pd_train[respuesta]
-
-    # se instacia el modelo
-    logreg = LogisticRegression(random_state=16)
-
-    # se entrena el modelo
-    logreg.fit(X_train, y_train)
-    return logreg
-
-
-def logistical_regresion_predict(log_reg, test, attrs):
-    df_test = pd.DataFrame(test)
-    x_test_df = df_test[attrs]
-    y_pred_df = log_reg.predict(x_test_df)
-    return y_pred_df
-
-
-def search_svm(
-    train,
-    test,
-    attrs,
-    respuesta,
-    kernel,
-    C_values,
-    r_values,
-    gamma_values,
-    prediction_column,
-    condicion_cumplida,
-):
-
-    shuffled_train = train.copy()
-    random.shuffle(shuffled_train)
-
-    pd_train = pd.DataFrame(shuffled_train)
-    pd_test = pd.DataFrame(test)
-
-    # se separa X e y
-    X_train = pd_train[attrs]
-    y_train = pd_train[respuesta]
-
-    hiperparameters = gamma_values
-    if kernel == "poly":
-        hiperparameters = r_values
-
-    results = []
-    for C in C_values:
-        for hiperparameter in hiperparameters:
-
-            config = {"C": C, "kernel": kernel}
-
-            if kernel in ["rbf", "sigmoid"]:
-                config["gamma"] = hiperparameter
-            elif kernel == "poly":
-                config["degree"] = 3
-                config["coef0"] = hiperparameter  # valor r
-
-            svm = SVC(**config)
-            svm.fit(X_train, y_train)
-            y_pred = svm.predict(pd_test[attrs])
-
-            predicted = []
-            test_copy = test.copy()
-            for i, row in enumerate(test_copy):
-                row[prediction_column] = 1 if condicion_cumplida == y_pred[i] else 0
-                predicted.append(row)
-            results.append({**config, "instance_svm": svm, "predicted": predicted})
-    return results
+def prediction_knn_pond(train, attrs, row_test, K, respuesta):
+    distances = []
+                
+    for row_train in train:
+        values_train = []
+        values_test = []
+        for attr in attrs:
+            values_train.append(row_train[attr])
+            values_test.append(row_test[attr])
+            
+        distance = euclidean_distance(values_train, values_test)
+        distances.append((1 / distance ** 2, row_train[respuesta]))
+    
+    # ordenar de menor a mayor distancia
+    distances.sort(key=lambda x: x[0])
+    
+    # se calculas los pesos y se suman por clase
+    top_k = distances[:K]
+    sum_weights = {}
+    for weigth, label in top_k:
+        if label not in sum_weights:
+            sum_weights[label] = 0
+        sum_weights[label] += weigth
+    mayor_weight = -1
+    
+    # se obtiene la clase con mayor peso
+    class_prediction = None
+    for label, weight in sum_weights.items():
+        if weight > mayor_weight:
+            mayor_weight = weight
+            class_prediction = label
+    
+    return class_prediction
+        
