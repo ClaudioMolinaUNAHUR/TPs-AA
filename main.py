@@ -8,6 +8,7 @@ from tp_2.part_2 import tp2_part_2
 from tp_3.part_1 import tp3_part_1 
 from tp_3.part_2 import tp3_part_2
 from tp_4.part_1 import tp4_part_1
+from tp_4.part_2 import tp4_part_2
 import json
 
 
@@ -33,7 +34,8 @@ def main():
     # print("Resultado Ejercicio 2:\n", like_json(tp_3_result_3))
     
     tp_4_result_1 = tp4_part_1()
-    print("Resultado Ejercicio 1:\n", like_json(tp_4_result_1))
+    tp_4_result_2 = tp4_part_2()
+    print("Resultado Ejercicio 2:\n", like_json(tp_4_result_2))
 
 
 
