@@ -1,6 +1,12 @@
 import sys
 import os
-from utils.helpers import cargar_csv, split_test_data, filter_data_wines, confusion_matrix
+from utils.helpers import (
+    cargar_csv,
+    split_test_data,
+    filter_data_wines,
+    confusion_matrix_multiclase,
+    calculate_metrics
+)
 from tp_4.addons.functions import standarize_data, prediction_knn, prediction_knn_pond
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -26,22 +32,21 @@ def tp4_part_1():
 
     respuesta = "quality"
     prediction_column = "prediction"
-    
+
     result = filter_data_wines(data, attrs, respuesta)
     test, train = split_test_data(result, test_size=0.20)
 
     train_std = standarize_data(train, attrs)
     test_std = standarize_data(test, attrs)
-    
+
     predicted = []
     Ks = [3, 5, 7]
     for row_test in test_std:
         result = prediction_knn(train_std, attrs, row_test, Ks, respuesta)
         predicted.append({"actual": row_test[respuesta], prediction_column: result})
-      
-    
+
     best_K = {}
-    
+
     for index in range(len(predicted)):
         actual = predicted[index]["actual"]
         prediction = predicted[index][prediction_column]
@@ -58,15 +63,36 @@ def tp4_part_1():
         if best_K_result["V"] < value:
             best_K_result["V"] = value
             best_K_result["K"] = K
-    
+
     print(best_K_result)
-        
+
     predicted_pond = []
-    for row_test in test_std:         
-        result = prediction_knn_pond(train_std, attrs, row_test, best_K_result["K"], respuesta)
-        predicted_pond.append({"actual": row_test[respuesta], prediction_column: result})
-    print(predicted_pond)
-    print(predicted)
+    for row_test in test_std:
+        result = prediction_knn_pond(
+            train_std, attrs, row_test, best_K_result["K"], respuesta
+        )
+        predicted_pond.append(
+            {"actual": row_test[respuesta], prediction_column: result}
+        )
+    predicted_best_K = predicted.copy()
+    for i in range(len(predicted)):
+        predicted_best_K[i][prediction_column] = predicted_best_K[i][prediction_column][
+            best_K_result["K"]
+        ]
+
+    confusion_matrix_knn = confusion_matrix_multiclase(
+        predicted_best_K, "actual", prediction_column
+    )
+    confusion_matrix_knn_pond = confusion_matrix_multiclase(
+        predicted_pond, "actual", prediction_column
+    )
+    print("Matriz de confusión para KNN:", confusion_matrix_knn)
+    print("Matriz de confusión para KNN ponderado:", confusion_matrix_knn_pond )
+    knn_metrics = calculate_metrics(confusion_matrix_knn)
+    knn_pond_metrics = calculate_metrics(confusion_matrix_knn_pond)
+
+    print("Métricas para KNN:", knn_metrics)
+    print("Métricas para KNN ponderado:", knn_pond_metrics)
     return
     # return {
     #     "split": {"train": len(train), "test": len(test), "proporcion_test": 0.20},

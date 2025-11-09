@@ -351,3 +351,56 @@ def plot_precision_vs_tree_size(node_counts, train_accuracies, test_accuracies, 
     plt.show()
 
     print(f"Gráfico guardado como: {path}")
+
+
+def confusion_matrix_multiclase(data, real_col, pred_col):
+    # Obtener todas las clases posibles
+    clases = sorted(list(set(row[real_col] for row in data)))
+    n = len(clases)
+    
+    # Crear matriz vacía n x n
+    matrix = [[0 for _ in range(n)] for _ in range(n)]
+    
+    # Crear índice para mapear clase -> posición
+    class_index = {clase: i for i, clase in enumerate(clases)}
+    
+    # Contar ocurrencias
+    for row in data:
+        real = row[real_col]
+        pred = row[pred_col]
+        i = class_index[real]
+        j = class_index[pred]
+        matrix[i][j] += 1
+    # Real son Filas y Pred son Cols
+    # Devolver matriz y clases para interpretación
+    return matrix
+
+def calculate_metrics(matrix):
+    matrix = np.array(matrix)
+    # Suma de la diagonal principal (TP para todas las clases)
+    tp = np.diag(matrix)
+    # Suma de cada fila (TP + FN)
+    fn = np.sum(matrix, axis=1) - tp
+    # Suma de cada columna (TP + FP)
+    fp = np.sum(matrix, axis=0) - tp
+    # Total de instancias
+    total = np.sum(matrix)
+
+    # Accuracy
+    accuracy = np.sum(tp) / total
+
+    # Recall por clase
+    recall = np.divide(tp, (tp + fn), out=np.zeros_like(tp, dtype=float), where=(tp + fn) != 0)
+
+    # Precision por clase
+    precision = np.divide(tp, (tp + fp), out=np.zeros_like(tp, dtype=float), where=(tp + fp) != 0)
+
+    # F1-score por clase
+    f1 = np.divide(2 * (precision * recall), (precision + recall), out=np.zeros_like(tp, dtype=float), where=(precision + recall) != 0)
+
+    return {
+        "accuracy": accuracy,
+        "recall": recall,
+        "precision": precision,
+        "f1": f1,
+    }
