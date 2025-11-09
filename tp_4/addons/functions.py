@@ -113,8 +113,6 @@ def prediction_knn_pond(train, attrs, row_test, K, respuesta):
 
     sum_weights = {}
     for distance, label in top_k:
-        # Peso inversamente proporcional al cuadrado de la distancia
-        # Ya verificamos que distance > 0, así que es seguro dividir
         weight = 1 / (distance**2)
 
         if label not in sum_weights:

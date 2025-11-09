@@ -56,15 +56,13 @@ def tp4_part_1():
             if label == actual:
                 best_K[K] += 1
 
-    print(best_K)
+
     # Verificar si best_K tiene elementos antes de usar max()
     best_K_result = {"K": None, "V": 0}
     for K, value in best_K.items():
         if best_K_result["V"] < value:
             best_K_result["V"] = value
             best_K_result["K"] = K
-
-    print(best_K_result)
 
     predicted_pond = []
     for row_test in test_std:
