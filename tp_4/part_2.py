@@ -5,9 +5,15 @@ from utils.helpers import (
     split_test_data,
     filter_data_wines,
     confusion_matrix_multiclase,
-    calculate_metrics
+    calculate_metrics,
 )
-from tp_4.addons.functions import knn_mean, standarize_data, prediction_knn,  knn_mean, predict_kmeans
+from tp_4.addons.functions import (
+    knn_mean,
+    standarize_data,
+    prediction_knn,
+    knn_mean,
+    predict_kmeans,
+)
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -39,28 +45,62 @@ def tp4_part_2():
     train_std = standarize_data(train, attrs)
     test_std = standarize_data(test, attrs)
 
-    Ks =[3,5,7]
+    Ks = [2, 3, 4, 5]
 
-
-    prediction = {}
-    predicted = []
     for K in Ks:
-        clusters = knn_mean(train_std,attrs, K)
+        clusters = knn_mean(train_std, attrs, K)
         for row in test_std:
-        
-             
-            row[prediction_column] = predict_kmeans(train_std, row, attrs, respuesta, clusters)
+            # Asegurás que prediction_column sea un dict
+            row[prediction_column] = row.get(prediction_column, {})
 
-   
-    for row in test_std:
-        row[prediction_column] = prediction[K]
-        predicted.append(row)
-    confusion_matrix = confusion_matrix_multiclase(
-        test_std, respuesta, prediction_column
-    )
+            # Luego usás setdefault para asignar si no existe esa clave K
+            row[prediction_column].setdefault(
+                K, predict_kmeans(train_std, row, attrs, respuesta, clusters)
+            )
 
-    print("Matriz de confusión para KNN:", confusion_matrix)
-    knn_metrics = calculate_metrics(confusion_matrix)
-    print("Métricas para KNN:", knn_metrics)
+    confusion_matrix = {}
+    knn_metrics = {}
+    for K in Ks:
+        preds = []
+        for row in test_std:
+            # Crear una copia mínima del registro, cambiando solo la predicción
+            new_row = row.copy()
+            new_row[prediction_column] = row[prediction_column][K]
+            preds.append(new_row)
 
-    return
+        confusion_matrix[K] = confusion_matrix_multiclase(
+            preds, respuesta, prediction_column
+        )
+        knn_metrics[K] = calculate_metrics(confusion_matrix[K])
+
+    return {
+        "split": {"train": len(train), "test": len(test), "proporcion_test": 0.20},
+        "KNMEDIAS-2": {
+            "confusion_matrix": confusion_matrix[2],
+            "accuracy": knn_metrics[2]["accuracy"],
+            "recall": knn_metrics[2]["recall"],
+            "precision": knn_metrics[2]["precision"],
+            "f1": knn_metrics[2]["f1"],
+        },
+        "KNMEDIAS-3": {
+            "confusion_matrix": confusion_matrix[3],
+            "accuracy": knn_metrics[3]["accuracy"],
+            "recall": knn_metrics[3]["recall"],
+            "precision": knn_metrics[3]["precision"],
+            "f1": knn_metrics[3]["f1"],
+        },
+        "KNMEDIAS-4": {
+            "confusion_matrix": confusion_matrix[4],
+            "accuracy": knn_metrics[4]["accuracy"],
+            "recall": knn_metrics[4]["recall"],
+            "precision": knn_metrics[4]["precision"],
+            "f1": knn_metrics[4]["f1"],
+        },
+        "KNMEDIAS-5": {
+            "confusion_matrix": confusion_matrix[5],
+            "accuracy": knn_metrics[5]["accuracy"],
+            "recall": knn_metrics[5]["recall"],
+            "precision": knn_metrics[5]["precision"],
+            "f1": knn_metrics[5]["f1"],
+        },
+    }

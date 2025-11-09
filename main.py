@@ -33,7 +33,8 @@ def main():
     # tp_3_result_3 = tp3_part_2()
     # print("Resultado Ejercicio 2:\n", like_json(tp_3_result_3))
     
-    tp_4_result_1 = tp4_part_1()
+    # tp_4_result_1 = tp4_part_1()
+    # print("Resultado Ejercicio 1:\n", like_json(tp_4_result_1))
     tp_4_result_2 = tp4_part_2()
     print("Resultado Ejercicio 2:\n", like_json(tp_4_result_2))
 

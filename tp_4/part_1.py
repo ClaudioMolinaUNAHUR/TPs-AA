@@ -5,7 +5,7 @@ from utils.helpers import (
     split_test_data,
     filter_data_wines,
     confusion_matrix_multiclase,
-    calculate_metrics
+    calculate_metrics,
 )
 from tp_4.addons.functions import standarize_data, prediction_knn, prediction_knn_pond
 
@@ -86,33 +86,23 @@ def tp4_part_1():
     confusion_matrix_knn_pond = confusion_matrix_multiclase(
         predicted_pond, "actual", prediction_column
     )
-    print("Matriz de confusión para KNN:", confusion_matrix_knn)
-    print("Matriz de confusión para KNN ponderado:", confusion_matrix_knn_pond )
     knn_metrics = calculate_metrics(confusion_matrix_knn)
     knn_pond_metrics = calculate_metrics(confusion_matrix_knn_pond)
 
-    print("Métricas para KNN:", knn_metrics)
-    print("Métricas para KNN ponderado:", knn_pond_metrics)
-    return
-    # return {
-    #     "split": {"train": len(train), "test": len(test), "proporcion_test": 0.20},
-    #     "attrs": attrs,
-    #     "respuesta": respuesta,
-    #     "regresion_lineal": {
-    #         "student_pred": y_pred_test_student_linear,
-    #         "coefficient_reg": coefficient_reg,
-    #         "r2_test": r2,
-    #     },
-    #     "respuesta_log_reg": respuesta_log_reg,
-    #     "regresion_logistica": {
-    #         "student_pred": y_pred_test_student_logistic[0],
-    #         "coefficient_reg": LogRegression.coef_,
-    #         "B0": LogRegression.intercept_,
-    #         "accuracy": accuracy,
-    #         "matrix": str_matrix,
-    #         "confusion_matrix": {"tp": tp, "tn": tn, "fp": fp, "fn": fn},
-    #         "f1": f1,
-    #     },
-
-
-#    }
+    return {
+        "split": {"train": len(train), "test": len(test), "proporcion_test": 0.20},
+        "KNN": {
+            "confusion_matrix": confusion_matrix_knn,
+            "accuracy": knn_metrics["accuracy"],
+            "recall": knn_metrics["recall"],
+            "precision": knn_metrics["precision"],
+            "f1": knn_metrics["f1"],
+        },
+        "KNN-POND": {
+            "confusion_matrix": confusion_matrix_knn_pond,
+            "accuracy": knn_pond_metrics["accuracy"],
+            "recall": knn_pond_metrics["recall"],
+            "precision": knn_pond_metrics["precision"],
+            "f1": knn_pond_metrics["f1"],
+        },
+    }

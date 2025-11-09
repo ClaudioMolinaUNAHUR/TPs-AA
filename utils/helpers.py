@@ -357,13 +357,13 @@ def confusion_matrix_multiclase(data, real_col, pred_col):
     # Obtener todas las clases posibles
     clases = sorted(list(set(row[real_col] for row in data)))
     n = len(clases)
-    
+
     # Crear matriz vacía n x n
     matrix = [[0 for _ in range(n)] for _ in range(n)]
-    
+
     # Crear índice para mapear clase -> posición
     class_index = {clase: i for i, clase in enumerate(clases)}
-    
+
     # Contar ocurrencias
     for row in data:
         real = row[real_col]
@@ -374,6 +374,7 @@ def confusion_matrix_multiclase(data, real_col, pred_col):
     # Real son Filas y Pred son Cols
     # Devolver matriz y clases para interpretación
     return matrix
+
 
 def calculate_metrics(matrix):
     matrix = np.array(matrix)
@@ -390,13 +391,22 @@ def calculate_metrics(matrix):
     accuracy = np.sum(tp) / total
 
     # Recall por clase
-    recall = np.divide(tp, (tp + fn), out=np.zeros_like(tp, dtype=float), where=(tp + fn) != 0)
+    recall = np.divide(
+        tp, (tp + fn), out=np.zeros_like(tp, dtype=float), where=(tp + fn) != 0
+    )
 
     # Precision por clase
-    precision = np.divide(tp, (tp + fp), out=np.zeros_like(tp, dtype=float), where=(tp + fp) != 0)
+    precision = np.divide(
+        tp, (tp + fp), out=np.zeros_like(tp, dtype=float), where=(tp + fp) != 0
+    )
 
     # F1-score por clase
-    f1 = np.divide(2 * (precision * recall), (precision + recall), out=np.zeros_like(tp, dtype=float), where=(precision + recall) != 0)
+    f1 = np.divide(
+        2 * (precision * recall),
+        (precision + recall),
+        out=np.zeros_like(tp, dtype=float),
+        where=(precision + recall) != 0,
+    )
 
     return {
         "accuracy": accuracy,
