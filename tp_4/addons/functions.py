@@ -4,17 +4,15 @@ import numpy as np
 def euclidean_distance(point1, point2):
     result = 0
     for i in range(len(point1)):
-        point1[i] -= point2[i]
-        point1[i] = point1[i] ** 2
-        result += point1[i]
+        diff = point1[i] - point2[i]
+        result += diff ** 2
     return math.sqrt(result)
 
 def manhattan_distance(point1, point2):
     result = 0
     for i in range(len(point1)):
-        point1[i] -= point2[i]
-        point1[i] = abs(point1[i])
-        result += point1[i]
+        diff = point1[i] - point2[i]
+        result += abs(diff)
     return result
 
 def standarize_data(data, attrs):
@@ -29,9 +27,11 @@ def standarize_data(data, attrs):
             suma += row[attr]
         media[attr] = suma / lenght
         
+        # Calcular varianza (reiniciar suma)
+        suma_varianza = 0.0
         for row in data:
-            suma += (row[attr] - media[attr]) ** 2
-        desvio[attr] = math.sqrt(suma / (lenght - 1.0))
+            suma_varianza += ((row[attr]) - media[attr]) ** 2
+        desvio[attr] = math.sqrt(suma_varianza / (lenght - 1.0))
     
     for row in data:
         new_row = row.copy()
@@ -92,21 +92,31 @@ def prediction_knn_pond(train, attrs, row_test, K, respuesta):
             values_test.append(row_test[attr])
             
         distance = euclidean_distance(values_train, values_test)
-        distances.append((1 / distance ** 2, row_train[respuesta]))
+        # Guardar distancia y label, luego ordenaremos por distancia
+        distances.append((distance, row_train[respuesta]))
     
     # ordenar de menor a mayor distancia
     distances.sort(key=lambda x: x[0])
     
-    # se calculas los pesos y se suman por clase
+    # tomar los K vecinos más cercanos y calcular pesos
     top_k = distances[:K]
+    
+    # Si hay distancia 0, retornar directamente esa clase (mismo punto)
+    if top_k[0][0] == 0:
+        return top_k[0][1]
+    
     sum_weights = {}
-    for weigth, label in top_k:
+    for distance, label in top_k:
+        # Peso inversamente proporcional al cuadrado de la distancia
+        # Ya verificamos que distance > 0, así que es seguro dividir
+        weight = 1 / (distance ** 2)
+        
         if label not in sum_weights:
             sum_weights[label] = 0
-        sum_weights[label] += weigth
-    mayor_weight = -1
+        sum_weights[label] += weight
     
     # se obtiene la clase con mayor peso
+    mayor_weight = -1
     class_prediction = None
     for label, weight in sum_weights.items():
         if weight > mayor_weight:
