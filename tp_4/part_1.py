@@ -72,11 +72,13 @@ def tp4_part_1():
         predicted_pond.append(
             {"actual": row_test[respuesta], prediction_column: result}
         )
-    predicted_best_K = predicted.copy()
-    for i in range(len(predicted)):
-        predicted_best_K[i][prediction_column] = predicted_best_K[i][prediction_column][
-            best_K_result["K"]
-        ]
+    # Crear una copia profunda de las predicciones para el mejor K
+    predicted_best_K = []
+    for pred in predicted:
+        predicted_best_K.append({
+            "actual": pred["actual"],
+            prediction_column: pred[prediction_column][best_K_result["K"]]
+        })
 
     confusion_matrix_knn = confusion_matrix_multiclase(
         predicted_best_K, "actual", prediction_column

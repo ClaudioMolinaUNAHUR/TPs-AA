@@ -10,8 +10,6 @@ from utils.helpers import (
 from tp_4.addons.functions import (
     knn_mean,
     standarize_data,
-    prediction_knn,
-    knn_mean,
     predict_kmeans,
 )
 
