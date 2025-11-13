@@ -34,10 +34,9 @@ def tp3_part_1():
         "Porcentaje de asistencia",
     ]
 
-    #------- REGRESION LINEAL-------#
+    # ------- REGRESION LINEAL-------#
     respuesta = "Calificación"
-    
-    
+
     result = filter_data_estudiantes(data, attrs, respuesta)
     test, train = split_test_data(result, test_size=0.20)
 
@@ -60,16 +59,15 @@ def tp3_part_1():
     ## se usa "y" para regresion multiple, con valores continuos
     coefficient_reg = train_linear_regression_multiple(X_train_reg, y_train_reg)
     y_pred_reg = predict_linear_regression(X_test_reg, coefficient_reg)
-    
-    #------- REGRESION LINEAL METRICAS-------#
+
+    # ------- REGRESION LINEAL METRICAS-------#
     r2 = r2_score(y_test_reg, y_pred_reg)
 
-
-    #------- REGRESION LOGISTICA -------#
+    # ------- REGRESION LOGISTICA -------#
     respuesta_log_reg = "Condición"
     condicion_cumplida = "Aprobado"
     prediction_column = "prediction"
-    
+
     ## se usa "y" para regresion logistica, con valores categoricos
     result_log_reg = filter_data_estudiantes(
         data, attrs, respuesta_log_reg, classification=True
@@ -77,16 +75,16 @@ def tp3_part_1():
     test_log_reg, train_log_reg = split_test_data(result_log_reg, test_size=0.20)
     LogRegression = logistical_regresion(train_log_reg, attrs, respuesta_log_reg)
 
-    y_pred_df = logistical_regresion_predict(
-        LogRegression, test_log_reg, attrs
-    )
-    
+    y_pred_df = logistical_regresion_predict(LogRegression, test_log_reg, attrs)
+
     predicted = []
     for i, row in enumerate(test_log_reg):
-        row[prediction_column] = 1 if condicion_cumplida == y_pred_df[i] else 0
+        accept = y_pred_df[i][0]
+        reject = y_pred_df[i][1]
+        row[prediction_column] = accept if accept > reject else abs(reject - 1)
         predicted.append(row)
-        
-    #------- REGRESION LOGISTICA METRICAS-------#
+
+    # ------- REGRESION LOGISTICA METRICAS-------#
     confusion_matrix_result, matrix, str_matrix = confusion_matrix(
         predicted, respuesta_log_reg, prediction_column, condicion_cumplida
     )
@@ -101,9 +99,9 @@ def tp3_part_1():
     precision = precision_score(tp, fp)
     f1 = f1_score(precision, recall)
 
-    #------- Nuevo estudiante a predecir -------
+    # ------- Nuevo estudiante a predecir -------
     test_new_student = {attrs[0]: 25.0, attrs[1]: 0.58, attrs[2]: 68.0}
-    
+
     test_student = []
     for attr in attrs:
         test_student.append(test_new_student[attr])
@@ -113,7 +111,7 @@ def tp3_part_1():
     y_pred_test_student_logistic = logistical_regresion_predict(
         LogRegression, [test_new_student], attrs
     )
-    
+
     return {
         "split": {"train": len(train), "test": len(test), "proporcion_test": 0.20},
         "attrs": attrs,
