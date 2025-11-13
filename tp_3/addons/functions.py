@@ -86,6 +86,7 @@ def search_svm(
     kernel,
     C_values,
     r_values,
+    g_values,
     gamma_values,
     prediction_column,
     condicion_cumplida,
@@ -104,8 +105,11 @@ def search_svm(
     hiperparameters = gamma_values
     if kernel == "poly":
         hiperparameters = r_values
+    if kernel == "linear":
+        hiperparameters = [1]
 
     results = []
+    
     for C in C_values:
         for hiperparameter in hiperparameters:
 
@@ -114,17 +118,20 @@ def search_svm(
             if kernel in ["rbf", "sigmoid"]:
                 config["gamma"] = hiperparameter
             elif kernel == "poly":
-                config["degree"] = 3
                 config["coef0"] = hiperparameter  # valor r
-
-            svm = SVC(**config)
-            svm.fit(X_train, y_train)
-            y_pred = svm.predict(pd_test[attrs])
-
-            predicted = []
-            test_copy = test.copy()
-            for i, row in enumerate(test_copy):
-                row[prediction_column] = 1 if condicion_cumplida == y_pred[i] else 0
-                predicted.append(row)
-            results.append({**config, "instance_svm": svm, "predicted": predicted})
+            g_grade = g_values if kernel == "poly" else [1]
+            for grade in g_grade:
+                if kernel == "poly":
+                    config["degree"] = grade
+                svm = SVC(**config)
+                svm.fit(X_train, y_train)
+                y_pred = svm.predict(pd_test[attrs])
+                print(config)
+                predicted = []
+                test_copy = test.copy()
+                for i, row in enumerate(test_copy):
+                    row[prediction_column] = 1 if condicion_cumplida == y_pred[i] else 0
+                    predicted.append(row)
+                results.append({**config, "instance_svm": svm, "predicted": predicted})
+                
     return results

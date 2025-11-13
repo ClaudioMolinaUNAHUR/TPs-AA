@@ -34,6 +34,7 @@ def tp3_part_2():
     C_values = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
     gamma_values = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10]
     r_values = [-1.0, -0.5, 0.0, 0.5, 1.0]
+    grades_values = [2, 3, 4, 5]
     kernels = ["linear", "rbf", "poly", "sigmoid"]
 
     best_SVMs_searched = []
@@ -47,6 +48,7 @@ def tp3_part_2():
             kernel=kernel_type,
             C_values=C_values,
             r_values=r_values,
+            g_values=grades_values,
             gamma_values=gamma_values,
             prediction_column=prediction_column,
             condicion_cumplida=condicion_cumplida,
